@@ -55,17 +55,40 @@ Trả lời JSON (chỉ JSON, không text khác):
 {{"winner": "A" hoặc "B" hoặc "tie", "reasoning": "giải thích ngắn gọn", "scores": {{"A": 0.0-1.0, "B": 0.0-1.0}}}}"""
 
     from openai import OpenAI
+    import time
     client = OpenAI()
-    resp = client.chat.completions.create(
-        model=JUDGE_MODEL,
-        temperature=0,
-        messages=[
+    resp = None
+    kwargs = {
+        "model": JUDGE_MODEL,
+        "temperature": 0,
+        "messages": [
             {"role": "system", "content": "Bạn là expert đánh giá RAG. Chỉ trả lời JSON."},
             {"role": "user", "content": prompt},
         ],
-        response_format={"type": "json_object"},
-    )
-    result = json.loads(resp.choices[0].message.content)
+        "response_format": {"type": "json_object"},
+    }
+    for attempt in range(6):
+        try:
+            resp = client.chat.completions.create(**kwargs)
+            break
+        except Exception as e:
+            if "unsupported_parameter" in str(e) or "response_format" in str(e):
+                kwargs.pop("response_format", None)
+                kwargs.pop("temperature", None)
+                resp = client.chat.completions.create(**kwargs)
+                break
+            elif ("429" in str(e) or "RateLimit" in type(e).__name__ or "RESOURCE_EXHAUSTED" in str(e)) and attempt < 5:
+                time.sleep(15)
+            else:
+                raise
+    content = resp.choices[0].message.content.strip()
+    if content.startswith("```json"):
+        content = content[7:]
+    elif content.startswith("```"):
+        content = content[3:]
+    if content.endswith("```"):
+        content = content[:-3]
+    result = json.loads(content.strip())
     winner = result.get("winner", "tie")
     if winner not in ("A", "B", "tie"):
         winner = "tie"

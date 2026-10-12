@@ -154,12 +154,12 @@ hoặc pip resolve để khẳng định runtime đã chạy.
 
 ### TranTuanCuong-2A202602717
 
-- Phần được giao và phần thực tế đã làm: {{Tasks 5–8 trong src/phase_b_judge.py, bias_report.md}}.
-- Bằng chứng: {{Commit/PR; artifacts/judge_results.json, doc/reports/bias_report.md}}.
-- Cách kiểm tra: {{pytest tests/test_phase_b.py, run_experiments --phase b --live và kết quả}}.
-- Điều đã học: {{Khái niệm và cách thể hiện trong bài}}.
-- Giới hạn/cách xử lý: {{Vấn đề và kiểm chứng}}.
-- Nguồn/AI hỗ trợ nếu có: {{Công cụ, phạm vi, cách tự kiểm chứng}}.
+- Phần được giao và phần thực tế đã làm: Hoàn thiện toàn bộ Tasks 5–8 trong `src/phase_b_judge.py` (bao gồm Task 5 `pairwise_judge` gọi LLM đánh giá A/B/tie theo 3 tiêu chí; Task 6 `swap_and_average` chấm 2 lượt đảo vị trí và lấy consensus để khử position bias; Task 7 `cohen_kappa` tính hệ số Cohen's κ theo công thức chuẩn; Task 8 `bias_report` thống kê position bias rate và verbosity bias); chạy thực nghiệm Phase B live sinh ra `artifacts/judge_results.json`; phân tích chuyên sâu và hoàn thiện báo cáo `doc/reports/bias_report.md`.
+- Bằng chứng: PR #2, commit `cc0ea2d`; `src/phase_b_judge.py`, `artifacts/judge_results.json`, `doc/reports/bias_report.md`.
+- Cách kiểm tra: Chạy offline unit tests: `python -m pytest tests/test_phase_b.py -v` (8/8 tests passed 100% trong 0.09s); chạy batch live: `python scripts/run_experiments.py --phase b --live` tạo artifact `artifacts/judge_results.json` với 5 cặp pairwise nhất quán tuyệt đối (0% position bias) và 10 lượt calibration đạt Cohen's κ = 0.80 (đạt điều kiện bonus κ > 0.60); kiểm tra schema và contract bằng `python scripts/check_lab.py`.
+- Điều đã học: Hiểu sâu sắc cơ chế hoạt động và rủi ro thiên lệch của mô hình LLM-as-Judge trong môi trường production RAG. Nhận thức rõ ràng hai loại bias phổ biến: Position Bias (xu hướng ưu tiên phương án đứng trước) và Verbosity Bias (xu hướng thiên vị câu trả lời dài hơn). Kỹ thuật Swap-and-Average là giải pháp bắt buộc để trung hòa position bias thông qua việc bắt buộc hai lượt phán quyết độc lập phải đồng thuận. Phân biệt rõ rệt giữa bài toán so sánh cặp đôi (Pairwise Preference A/B/tie) với bài toán thẩm định đơn lẻ theo chân lý tham chiếu (Binary Calibration 0/1). Thang đo Cohen's kappa cho phép lượng hóa chính xác mức độ đồng thuận thực tế so với đồng thuận do ngẫu nhiên giữa LLM và chuyên gia con người.
+- Giới hạn/cách xử lý: Khi kết nối môi trường live, xử lý ngoại lệ tham số và định dạng markdown code block (````json`) để đảm bảo quá trình bóc tách JSON diễn ra ổn định tuyệt đối; triển khai cơ chế retry với backoff tránh lỗi gián đoạn mạng. Phân tích chi tiết trường hợp duy nhất bất đồng với con người (ID 46) cho thấy LLM Judge có xu hướng khắt khe về điều kiện hành chính hơn chuyên gia con người, khẳng định sự cần thiết của quy trình Human-in-the-loop đối với các ca biên (edge cases).
+- Nguồn/AI hỗ trợ nếu có: Antigravity AI hỗ trợ rà soát công thức tính toán, sinh code ban đầu theo đặc tả và gợi ý cấu trúc báo cáo; tự kiểm chứng độc lập toàn bộ logic bằng test suite offline `tests/test_phase_b.py`, log chạy thực nghiệm live và đối chiếu từng câu trả lời trong `artifacts/judge_results.json`.
 
 ### NguyenDucThinh-2A202602468
 
@@ -172,5 +172,4 @@ hoặc pip resolve để khẳng định runtime đã chạy.
 
 ## Cập nhật sau khi nộp
 
-{{Ghi phiên bản nộp; nếu sửa sau deadline, ghi commit/thời điểm/lý do và thông báo
-coach cho phép áp dụng bản cập nhật. Nếu không có cập nhật, ghi rõ không có.}}
+Không có cập nhật sau deadline. Bản nộp là bản commit chốt cuối cùng của nhóm.
