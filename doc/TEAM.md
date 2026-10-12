@@ -17,7 +17,7 @@ Mỗi nhóm nộp một repo. Điền đủ thành viên và một mục INDIVID
 | STT | Họ và tên | MSSV | Vai trò / công việc thật | Bằng chứng |
 |---|---|---|---|---|
 | 1 | Trần Anh Vũ | 2A202602570 | Trưởng nhóm, phụ trách tích hợp: setup answers 50q, adapter m4 `evaluator_models`, Task 12 `measure_p95_latency` (`src/phase_c_guard.py`), Task 13 `doc/reports/blueprint.md`, TEAM, check_lab, nộp bài | {{Commit/PR}}, `artifacts/answers_50q.json`, `doc/reports/blueprint.md` |
-| 2 | Trần Võ Hoàng Nguyên | 2A202602551 | Phase A, RAGAS: Tasks 1–4 trong `src/phase_a_ragas.py`, chạy Phase A live, viết failure_clusters | {{Commit/PR}}, `artifacts/ragas_50q.json`, `doc/reports/failure_clusters.md` |
+| 2 | Trần Võ Hoàng Nguyên | 2A202602551 | Phase A, RAGAS: Tasks 1–4 trong `src/phase_a_ragas.py`, chạy Phase A live, viết failure_clusters | PR #1; nhánh codex/phase-a-hoang-nguyen, `artifacts/ragas_50q.json`, `doc/reports/failure_clusters.md` |
 | 3 | Trần Tuấn Cường | 2A202602717 | Phase B, LLM judge: Tasks 5–8 trong `src/phase_b_judge.py`, chạy Phase B live, viết bias_report | {{Commit/PR}}, `artifacts/judge_results.json`, `doc/reports/bias_report.md` |
 | 4 | Nguyễn Đức Thịnh | 2A202602468 | Phase C, Guardrails: Tasks 9a, 9b, 10, 11 trong `src/phase_c_guard.py`, tinh chỉnh `guardrails/`, chạy Phase C live | {{Commit/PR}}, `artifacts/guard_results.json` |
 
@@ -110,12 +110,12 @@ hoặc pip resolve để khẳng định runtime đã chạy.
 
 ### TranVoHoangNguyen-2A202602551
 
-- Phần được giao và phần thực tế đã làm: {{Tasks 1–4 trong src/phase_a_ragas.py, failure_clusters.md}}.
-- Bằng chứng: {{Commit/PR; artifacts/ragas_50q.json, doc/reports/failure_clusters.md}}.
-- Cách kiểm tra: {{pytest tests/test_phase_a.py, run_experiments --phase a --live và kết quả}}.
-- Điều đã học: {{Khái niệm và cách thể hiện trong bài}}.
-- Giới hạn/cách xử lý: {{Vấn đề và kiểm chứng}}.
-- Nguồn/AI hỗ trợ nếu có: {{Công cụ, phạm vi, cách tự kiểm chứng}}.
+- Phần được giao và phần mã đã hoàn thiện với AI hỗ trợ: Tasks 1–4 trong src/phase_a_ragas.py và src/phase_a_analysis.py; chạy RAGAS trên 50 answers thật của nhóm, viết failure_clusters.md và công cụ tổng hợp report.
+- Bằng chứng: PR mã ban đầu #1, nhánh codex/phase-a-hoang-nguyen; artifacts/ragas_50q.json, doc/reports/failure_clusters.md, doc/PHASE_A_WORK_REPORT.md.
+- Cách kiểm tra: 96 tests Phase A/schema/support pass trong .venv-phase-a; runner A --live chạy 200 phép đo. JSON schema, ids, 20/20/10, sources/models/hash và Markdown được validate offline.
+- Nội dung cần nắm và tự giải thích trước nộp: bốn metric đo các khía cạnh khác nhau; faithfulness cao không bảo đảm policy hiện hành đúng (câu 41); matrix đếm mọi câu và nhóm yếu phải chọn bằng mean, không số câu. Kết quả factual=0,918184, multi_hop=0,709813, adversarial=0,743413.
+- Giới hạn/cách xử lý: một lượt RAGAS trên 50 câu; generation là GPT-4o-mini, evaluator Gemini 3.8 + BGE-M3. Đã đối chiếu answer/contexts/reference để phân biệt retrieval/generation/version/negation; cải tiến được đề xuất nhưng chưa chạy lại pipeline sau sửa.
+- Nguồn/AI hỗ trợ: Codex hỗ trợ mã, tests, cài runtime riêng, chạy và phân tích số đo thật. Claude bị dừng trước khi có file bàn giao. Học viên cần đọc và tự kiểm chứng, không khai mock tests là live và không dùng AI để bịa số đo.
 
 ### TranTuanCuong-2A202602717
 
