@@ -60,5 +60,8 @@ RERANKER_MODEL = os.getenv("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "") or os.getenv("GOOGLE_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
+GEMINI_OPENAI_BASE_URL = os.getenv(
+    "GEMINI_OPENAI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/"
+)
 GEMINI_RPM = int(os.getenv("GEMINI_RPM", "12"))
 LLM_CACHE_DIR = os.path.join(os.path.dirname(__file__), ".cache")
