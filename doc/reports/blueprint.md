@@ -6,8 +6,10 @@ Người phụ trách: Trần Anh Vũ — 2A202602570
 
 Đây là **đề xuất CI/CD**, không phải workflow đã được triển khai/chạy.
 Nguồn kết quả: artifacts/ragas_50q.json, judge_results.json, guard_results.json.
-Run timestamp: {{created_at}}; guard models: {{metadata.models.guard}}.
-Models generation/evaluator/judge từ A/B: {{models theo từng vai trò và nguồn report}}.
+Run timestamp Phase C: 2026-10-12T09:15:56Z (`guard_results.json`); Phase A/B: {{created_at của ragas_50q.json và judge_results.json}};
+guard models: `gpt-4o-mini` (NeMo self-check input/output).
+Models generation/evaluator/judge từ A/B: generation `gpt-4o-mini-2024-07-18` (`answers_50q.json`);
+evaluator/judge: {{metadata.models.evaluator và metadata.models.judge từ ragas_50q.json, judge_results.json}}.
 
 ## Kiến trúc và failure action
 
@@ -35,20 +37,24 @@ Bắt buộc Task 12: **input_layers_sequential**, Presidio + NeMo input, không
 short-circuit. Engines tạo trước đo; có hai warm-up thật không tính vào mẫu.
 Percentile nội suy tuyến tính từ raw samples; tổng từ tổng từng sample.
 
-Số mẫu timed: {{n_samples}}; warm-up: {{warmup_runs}};
-phương pháp: {{percentile_method}}.
+Số mẫu timed: 20; warm-up: 2;
+phương pháp: linear (nội suy tại `(n-1)*q`), số liệu từ `guard_results.json` lượt 2026-10-12T09:15:56Z.
 
 | Layer / scope | P50 ms | P95 ms | P99 ms | Tình trạng |
 |---|---|---|---|---|
-| Presidio | {{p50}} | {{p95}} | {{p99}} | {{Kết quả đo Task 12}} |
-| NeMo input | {{p50}} | {{p95}} | {{p99}} | {{Kết quả đo Task 12}} |
-| Input guard sequential | {{p50}} | {{p95}} | {{p99}} | {{Kết quả đo Task 12}} |
+| Presidio | 5.70 | 6.91 | 9.06 | Đã đo (Task 12) |
+| NeMo input | 660.36 | 809.10 | 817.83 | Đã đo (Task 12); chiếm ~99% thời gian input guard |
+| Input guard sequential | 665.49 | 815.47 | 823.16 | Đã đo (Task 12); vượt target 500ms |
 | RAG | chưa đo | chưa đo | chưa đo | Ngoài phạm vi bắt buộc |
 | NeMo output | chưa đo | chưa đo | chưa đo | Ngoài phạm vi bắt buộc |
 | Full guard / short-circuit request | chưa đo | chưa đo | chưa đo | Không suy từ input_guard_ms |
 
-Input-layer budget target: 500ms; kết quả thực tế/budget_ok: {{giá trị và bool}}.
-{{Nêu bottleneck nếu vượt target, dựa trên presidio_ms so với nemo_input_ms.}}
+Input-layer budget target: 500ms; kết quả thực tế/budget_ok: P95 815.47ms / `false`.
+Bottleneck là NeMo input rail: mỗi request gọi một lượt LLM `gpt-4o-mini` qua mạng (P95 809.10ms),
+trong khi Presidio chạy local chỉ P95 6.91ms. Hai lượt chạy trước trong cùng buổi cho P95 input guard
+872.72ms và 842.92ms, nên kết quả vượt budget ổn định chứ không phải nhiễu. Số đo được ghi đúng, không
+sửa cho đạt. Hướng giảm: cache quyết định cho câu lặp lại, thử model self-check nhỏ/nhanh hơn, hoặc
+thêm bộ phân loại local trước NeMo để chỉ gọi LLM khi không chắc chắn; mỗi hướng phải đo lại bằng Task 12.
 
 Kế hoạch đo phần “chưa đo”:
 
@@ -103,7 +109,8 @@ clean đã là 12.5%, nên không dùng các bộ này để kết luận tỷ l
 
 RAGAS mean/worst distribution: {{giá trị}}.
 Cohen’s κ: {{giá trị}}.
-Attacks passed: {{số lượng}}/20; clean false_positive_rate: {{giá trị}}.
+Attacks passed: 20/20 (Presidio chặn 4 câu PII id 1–4, NeMo input chặn 16); clean false_positive_rate: 0/8 = 0.0;
+output cases 4/4 đúng.
 
 Cải tiến có thể kiểm tra:
 
@@ -112,4 +119,8 @@ Cải tiến có thể kiểm tra:
 2. Viết `scripts/ci_gate.py` như mục CI gates và chạy thử với ba JSON hiện có; kiểm tra script
    trả exit 1 khi tạm nâng một ngưỡng lên trên giá trị thật.
 3. {{Cải tiến từ nhóm lỗi yếu nhất trong failure_clusters.md, kèm cách đo lại.}}
-4. {{Cải tiến từ bias_report.md hoặc từ các câu clean/attack sai trong guard_results.json.}}
+4. Kết quả guard dao động giữa các lượt vì self-check dùng LLM: trước khi chỉnh prompt, các lượt cùng buổi
+   có 1 câu clean bị chặn nhầm (câu hỏi chính sách mật khẩu, rồi câu hỏi quy định lương thử việc) và 2 câu
+   off-topic lọt. Đề xuất CI chạy suite Phase C 3 lần và lấy kết quả xấu nhất làm gate; kiểm tra bằng số
+   lượt có clean bị chặn nhầm trên 3 lượt.
+5. {{Cải tiến từ bias_report.md, kèm cách kiểm tra.}}

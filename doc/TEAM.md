@@ -119,7 +119,10 @@ hoặc pip resolve để khẳng định runtime đã chạy.
   `metadata.evaluator_models` = [GEMINI_MODEL, EMBEDDING_MODEL]; Task 12 `measure_p95_latency` (engines tạo
   trước, 2 warm-up thật, luôn đo Presidio rồi NeMo input, không short-circuit); fix m2 dense search cho
   qdrant-client 1.9 và tùy chọn fp16 cho m2/m3; merge lead → main; viết blueprint; tích hợp/nộp.
-- Bằng chứng: commits `50f550e`, `ad208a6`, `34b1bad`, merge `4404f72`; `artifacts/answers_50q.json`,
+  Khi tích hợp Phase C: phát hiện `pii_scan` dùng mọi recognizer mặc định (PERSON/US_* bắt nhầm tiếng
+  Việt, 7/8 câu clean bị chặn khi chạy Presidio thật) → chỉ giữ VN_CCCD/VN_PHONE/EMAIL/PHONE; chỉnh
+  `self_check_input`; chạy Phase C live (attacks 20/20, clean 8/8, output 4/4, input guard P95 815.47ms).
+- Bằng chứng: commits `50f550e`, `ad208a6`, `34b1bad`, `ea078a1` (fix Phase C), merge `4404f72`; `artifacts/answers_50q.json`,
   `doc/reports/blueprint.md`.
 - Cách kiểm tra: script kiểm tra answers (50 id/thứ tự khớp test set, 20/20/10, contexts không rỗng,
   50/50 llm, không trùng ground_truth, không chứa `sk-`/`AIza`, jsonschema OK); sau merge `pytest tests/ -q`:
