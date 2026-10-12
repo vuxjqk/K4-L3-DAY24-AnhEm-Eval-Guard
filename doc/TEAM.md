@@ -19,7 +19,7 @@ Mỗi nhóm nộp một repo. Điền đủ thành viên và một mục INDIVID
 | 1 | Trần Anh Vũ | 2A202602570 | Trưởng nhóm, phụ trách tích hợp: setup answers 50q, adapter m4 `evaluator_models`, Task 12 `measure_p95_latency` (`src/phase_c_guard.py`), Task 13 `doc/reports/blueprint.md`, TEAM, check_lab, nộp bài | `34b1bad` (answers), `50f550e` (m4 + Task 12), `ad208a6` (m2/m3 fix), merge `4404f72`; `artifacts/answers_50q.json`, `doc/reports/blueprint.md` |
 | 2 | Trần Võ Hoàng Nguyên | 2A202602551 | Phase A, RAGAS: Tasks 1–4 trong `src/phase_a_ragas.py`, chạy Phase A live, viết failure_clusters | `74e6215` (PR #1); `artifacts/ragas_50q.json`, `doc/reports/failure_clusters.md` |
 | 3 | Trần Tuấn Cường | 2A202602717 | Phase B, LLM judge: Tasks 5–8 trong `src/phase_b_judge.py`, chạy Phase B live, viết bias_report | `cc0ea2d` (PR #2); `artifacts/judge_results.json`, `doc/reports/bias_report.md` |
-| 4 | Nguyễn Đức Thịnh | 2A202602468 | Phase C, Guardrails: Tasks 9a, 9b, 10, 11 trong `src/phase_c_guard.py`, tinh chỉnh `guardrails/`, chạy Phase C live | {{Commit/PR}}, `artifacts/guard_results.json` |
+| 4 | Nguyễn Đức Thịnh | 2A202602468 | Phase C, Guardrails: Tasks 9a, 9b, 10, 11 trong `src/phase_c_guard.py`, tinh chỉnh `guardrails/`, chạy Phase C live | `855a44b` (nhánh `Thihn/task3`); `artifacts/guard_results.json` |
 
 Người tích hợp/chạy batch/nộp link: Trần Anh Vũ — sinh answers, merge PR các
 phase, chạy `python scripts/check_lab.py --with-tests`, push và nộp link.
@@ -148,12 +148,12 @@ hoặc pip resolve để khẳng định runtime đã chạy.
 
 ### NguyenDucThinh-2A202602468
 
-- Phần được giao và phần thực tế đã làm: {{Tasks 9a, 9b, 10, 11 trong src/phase_c_guard.py, guardrails config}}.
-- Bằng chứng: {{Commit/PR; artifacts/guard_results.json}}.
-- Cách kiểm tra: {{pytest tests/test_phase_c.py, run_experiments --phase c --live và kết quả}}.
-- Điều đã học: {{Khái niệm và cách thể hiện trong bài}}.
-- Giới hạn/cách xử lý: {{Vấn đề và kiểm chứng}}.
-- Nguồn/AI hỗ trợ nếu có: {{Công cụ, phạm vi, cách tự kiểm chứng}}.
+- Phần được giao và phần thực tế đã làm: Tasks 9a, 9b, 10, 11 trong `src/phase_c_guard.py`, cấu hình `guardrails/config.yml` và `guardrails/rails.co`.
+- Bằng chứng: Nhánh `Thihn/task3`, source `src/phase_c_guard.py`, 12/12 unit tests passed (`tests/test_phase_c.py`), `artifacts/guard_results.json`.
+- Cách kiểm tra: `python -m pytest tests/test_phase_c.py -v`, `python scripts/check_lab.py`, `python scripts/run_experiments.py --phase c --live --latency-samples 20`.
+- Điều đã học: Presidio PII scanning với custom regex VN (CCCD/CMND/SĐT), NeMo Guardrails Colang 1.0 tự kiểm tra input/output rail bằng self-check prompts, đo độ trễ tuần tự P95 cho input layer.
+- Giới hạn/cách xử lý: Chạy NeMo input rail tốn thời gian; tối ưu thực thi async gom trong một event loop duy nhất để tránh treo trên Windows; tinh chỉnh prompt self-check để không chặn nhầm 8 câu clean input.
+- Nguồn/AI hỗ trợ nếu có: Antigravity AI hỗ trợ sinh mã mẫu theo spec, tự kiểm chứng bằng test suite `tests/test_phase_c.py` và `scripts/check_lab.py`.
 
 ## Cập nhật sau khi nộp
 
