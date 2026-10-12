@@ -68,6 +68,8 @@ Observed/chance agreement và diễn giải:
 2. **Giới hạn thực nghiệm:**
    - Tập mẫu hiệu chuẩn (10 câu) và tập pairwise (5 cặp) còn tương đối nhỏ so với quy mô production.
    - Việc phụ thuộc vào prompt đánh giá và nhiệt độ (temperature=0) đảm bảo tính tái lập nhưng vẫn có khả năng sai lệch đối với các trường hợp suy luận đa tầng phức tạp hoặc xung đột chính sách giữa các phiên bản.
+   - **Nguồn gốc model judge:** `gemini-flash` là alias của proxy WebAI-to-API chạy local (`http://localhost:6969/v1`, xem `doc/PHASE_B_WORK_REPORT.md`), không phải model ID chính thức của Google API. Nhóm chưa xác minh model và phiên bản thực sự phía sau alias này, nên κ=0.80 và các tỷ lệ bias chỉ gắn với lượt chạy qua proxy đó; đổi sang judge chính thức (ví dụ `gpt-4o-mini` hoặc Gemini API) cần chạy lại Phase B và so sánh.
+   - **Thay đổi helper `judge_binary`** (`src/experiment_support.py`): chỉ thêm retry khi gặp 429, bóc khối ```json và fallback bỏ `response_format`/`temperature` nếu endpoint không hỗ trợ. Prompt `BINARY_SYSTEM_PROMPT` và dữ liệu gửi đi (question, model_answer, reference) giữ nguyên; không gửi human_label/human_note. Nếu fallback được kích hoạt thì lượt đó không còn đảm bảo temperature=0.
 3. **Khuyến nghị vận hành:**
    - Không nên xem kết quả từ LLM-as-Judge là chân lý tuyệt đối thay thế con người.
    - Cần kết hợp kỹ thuật swap-and-average định kỳ để giám sát position bias.

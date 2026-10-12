@@ -48,16 +48,18 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu nghi_phep_nam_v2024.md, có hiệu lực thay thế phiên bản 1.0 từ ngày 01/01/2023, nói về số ngày phép năm của nhân viên chính thức.
 
-Mỗi nhân viên chính thức được hưởng **15 ngày phép năm** có lương, tăng từ 12 ngày so với chính sách năm 2023. Chính sách này thay thế hoàn toàn phiên bản 1.0 ban hành ngày 01/01/2023.
-## Thâm niên công tác
+> Mỗi nhân viên chính thức được hưởng **15 ngày phép năm** có lương, tăng từ 12 ngày so với chính sách năm 2023. Chính sách này thay thế hoàn toàn phiên bản 1.0 ban hành ngày 01/01/2023.
+> \## Thâm niên công tác
+
 - Context 2: Đoạn văn thuộc tài liệu Chính sách nghỉ phép năm v2023, quy định về số ngày phép năm và cách tính cho nhân viên.
 
-Mỗi nhân viên chính thức được hưởng **12 ngày phép năm** có lương. Số ngày phép được tính theo năm dương lịch từ 01/01 đến 31/12. Nhân viên vào công ty giữa năm sẽ được tính pro-rata theo số tháng làm việc thực tế.
-## Thâm niên công tác
+> Mỗi nhân viên chính thức được hưởng **12 ngày phép năm** có lương. Số ngày phép được tính theo năm dương lịch từ 01/01 đến 31/12. Nhân viên vào công ty giữa năm sẽ được tính pro-rata theo số tháng làm việc thực tế.
+> \## Thâm niên công tác
+
 - Context 3: Đoạn văn thuộc tài liệu 'nghi_phep_nam_v2024.md' và nói về quy định cộng thêm ngày phép năm theo thâm niên làm việc.
 
-Nhân viên có thâm niên từ **3 năm trở lên** được cộng thêm **1 ngày phép** cho mỗi 3 năm làm việc liên tục. Ví dụ: nhân viên 9 năm thâm niên được 18 ngày phép (15 + 3).
-## Quy định sử dụng
+> Nhân viên có thâm niên từ **3 năm trở lên** được cộng thêm **1 ngày phép** cho mỗi 3 năm làm việc liên tục. Ví dụ: nhân viên 9 năm thâm niên được 18 ngày phép (15 + 3).
+> \## Quy định sử dụng
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: LLM hallucinating. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Tighten system prompt, lower temperature; chạy lại evaluation để kiểm chứng.
@@ -72,16 +74,18 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc Chính sách mật khẩu v1.0, thông báo về việc thay đổi phiên bản chính sách và thời gian hết hiệu lực.
 
-Chính sách này đã được thay thế bởi Chính sách mật khẩu v2.0 từ ngày 01/07/2024. Vui lòng tham khảo phiên bản mới để biết quy định hiện hành.
+> Chính sách này đã được thay thế bởi Chính sách mật khẩu v2.0 từ ngày 01/07/2024. Vui lòng tham khảo phiên bản mới để biết quy định hiện hành.
+
 - Context 2: Đoạn văn thuộc tài liệu mat_khau_v2.md, quy định về yêu cầu và tiêu chuẩn đặt mật khẩu hệ thống.
 
-Mật khẩu phải có tối thiểu **12 ký tự**, bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (!@#$%^&*). Khuyến khích sử dụng passphrase dài hơn 16 ký tự.
-## Xác thực đa yếu tố (MFA)
+> Mật khẩu phải có tối thiểu **12 ký tự**, bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (!@#$%^&*). Khuyến khích sử dụng passphrase dài hơn 16 ký tự.
+> \## Xác thực đa yếu tố (MFA)
+
 - Context 3: Đoạn văn thuộc Chính sách mật khẩu (Phiên bản 1.0, ngày hiệu lực 01/01/2022) nói về phần yêu cầu mật khẩu và trạng thái đã bị thay thế.
 
-# Chính sách mật khẩu (Phiên bản cũ)
-> Phiên bản: 1.0 | Ngày hiệu lực: 01/01/2022 | Phòng ban: CNTT | Trạng thái: ĐÃ THAY THẾ bởi v2.0
-## Yêu cầu mật khẩu
+> \# Chính sách mật khẩu (Phiên bản cũ)
+> > Phiên bản: 1.0 | Ngày hiệu lực: 01/01/2022 | Phòng ban: CNTT | Trạng thái: ĐÃ THAY THẾ bởi v2.0
+> \## Yêu cầu mật khẩu
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: Answer doesn't match question. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Improve prompt template; chạy lại evaluation để kiểm chứng.
@@ -96,15 +100,17 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu Quản lý mật khẩu (phiên bản v1), quy định về chu kỳ và điều kiện thay đổi mật khẩu.
 
-Mật khẩu phải được thay đổi **mỗi 90 ngày**. Hệ thống sẽ tự động nhắc nhở trước 7 ngày. Mật khẩu mới không được trùng với 3 mật khẩu gần nhất.
-## Lưu ý
+> Mật khẩu phải được thay đổi **mỗi 90 ngày**. Hệ thống sẽ tự động nhắc nhở trước 7 ngày. Mật khẩu mới không được trùng với 3 mật khẩu gần nhất.
+> \## Lưu ý
+
 - Context 2: Đoạn văn thuộc tài liệu mat_khau_v2.md, nói về chính sách thay thế và quy định bảo mật mật khẩu.
 
-Mật khẩu phải được thay đổi **mỗi 120 ngày**. Hệ thống tự động nhắc nhở trước 14 ngày. Mật khẩu mới không được trùng với 5 mật khẩu gần nhất. Tài khoản bị khóa sau 5 lần nhập sai liên tiếp.
-## Chính sách thay thế
+> Mật khẩu phải được thay đổi **mỗi 120 ngày**. Hệ thống tự động nhắc nhở trước 14 ngày. Mật khẩu mới không được trùng với 5 mật khẩu gần nhất. Tài khoản bị khóa sau 5 lần nhập sai liên tiếp.
+> \## Chính sách thay thế
+
 - Context 3: Đoạn văn thuộc Chính sách mật khẩu v1.0, thông báo về việc thay đổi phiên bản chính sách và thời gian hết hiệu lực.
 
-Chính sách này đã được thay thế bởi Chính sách mật khẩu v2.0 từ ngày 01/07/2024. Vui lòng tham khảo phiên bản mới để biết quy định hiện hành.
+> Chính sách này đã được thay thế bởi Chính sách mật khẩu v2.0 từ ngày 01/07/2024. Vui lòng tham khảo phiên bản mới để biết quy định hiện hành.
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: LLM hallucinating. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Tighten system prompt, lower temperature; chạy lại evaluation để kiểm chứng.
@@ -119,19 +125,21 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu Bảng lương 2024, nói về chủ đề mức lương thử việc theo các cấp bậc nhân sự.
 
-| Senior (P3-P4) | 20.000.000 - 35.000.000 |
-| Lead (P5) | 35.000.000 - 50.000.000 |
-| Manager (M1-M2) | 45.000.000 - 70.000.000 |
-## Lương thử việc
+> | Senior (P3-P4) | 20.000.000 - 35.000.000 |
+> | Lead (P5) | 35.000.000 - 50.000.000 |
+> | Manager (M1-M2) | 45.000.000 - 70.000.000 |
+> \## Lương thử việc
+
 - Context 2: Đoạn văn thuộc tài liệu quy định về thử việc (thu_viec.md), nói về chế độ lương, phụ cấp và quyền lợi nghỉ phép của nhân viên thử việc.
 
-Nhân viên thử việc được nhận **85% mức lương** của cấp bậc tương ứng theo bảng lương công ty. Phụ cấp ăn trưa được áp dụng đầy đủ từ ngày đầu tiên.
-## Quyền lợi trong thử việc
-Nhân viên thử việc **KHÔNG được nghỉ phép năm**.
+> Nhân viên thử việc được nhận **85% mức lương** của cấp bậc tương ứng theo bảng lương công ty. Phụ cấp ăn trưa được áp dụng đầy đủ từ ngày đầu tiên.
+> \## Quyền lợi trong thử việc
+> Nhân viên thử việc **KHÔNG được nghỉ phép năm**.
+
 - Context 3: Đoạn văn thuộc tài liệu bang_luong_2024.md nói về chính sách điều chỉnh lương cho nhân viên trong và sau thời gian thử việc.
 
-Nhân viên trong thời gian thử việc được nhận **85% lương** của cấp bậc tương ứng. Sau khi hoàn thành thử việc, lương được điều chỉnh lên 100% kể từ ngày ký hợp đồng chính thức.
-## Điều chỉnh lương
+> Nhân viên trong thời gian thử việc được nhận **85% lương** của cấp bậc tương ứng. Sau khi hoàn thành thử việc, lương được điều chỉnh lên 100% kể từ ngày ký hợp đồng chính thức.
+> \## Điều chỉnh lương
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: Answer doesn't match question. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Improve prompt template; chạy lại evaluation để kiểm chứng.
@@ -146,16 +154,18 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu quy định về thử việc, nói về chế độ nghỉ phép và các quyền lợi bảo hiểm của nhân viên thử việc.
 
-Trường hợp cần nghỉ việc riêng, nhân viên thử việc phải xin nghỉ không lương và được trưởng phòng phê duyệt.
-Nhân viên thử việc được tham gia bảo hiểm xã hội bắt buộc nhưng chưa được hưởng gói bảo hiểm sức khỏe PVI.
-## Đánh giá thử việc
+> Trường hợp cần nghỉ việc riêng, nhân viên thử việc phải xin nghỉ không lương và được trưởng phòng phê duyệt.
+> Nhân viên thử việc được tham gia bảo hiểm xã hội bắt buộc nhưng chưa được hưởng gói bảo hiểm sức khỏe PVI.
+> \## Đánh giá thử việc
+
 - Context 2: Đoạn văn thuộc tài liệu bảo hiểm sức khỏe, nói về gói bảo hiểm sức khỏe toàn diện và hạn mức chi trả cho nhân viên.
 
-Công ty cung cấp gói bảo hiểm sức khỏe toàn diện qua **PVI Insurance** cho tất cả nhân viên chính thức. Hạn mức bảo hiểm: **200.000.000 VNĐ/năm** bao gồm nội trú, ngoại trú và nha khoa.
-## Gói gia đình
+> Công ty cung cấp gói bảo hiểm sức khỏe toàn diện qua **PVI Insurance** cho tất cả nhân viên chính thức. Hạn mức bảo hiểm: **200.000.000 VNĐ/năm** bao gồm nội trú, ngoại trú và nha khoa.
+> \## Gói gia đình
+
 - Context 3: Đoạn văn thuộc chính sách bảo hiểm sức khỏe, quy định về thủ tục khám chữa bệnh và thanh toán bồi hoàn bảo hiểm.
 
-Nhân viên xuất trình thẻ bảo hiểm PVI tại các bệnh viện/phòng khám trong danh sách liên kết. Trường hợp khám ngoài danh sách, nhân viên thanh toán trước và nộp hồ sơ bồi hoàn trong vòng 30 ngày. Thời gian xử lý bồi hoàn: 10-15 ngày làm việc.
+> Nhân viên xuất trình thẻ bảo hiểm PVI tại các bệnh viện/phòng khám trong danh sách liên kết. Trường hợp khám ngoài danh sách, nhân viên thanh toán trước và nộp hồ sơ bồi hoàn trong vòng 30 ngày. Thời gian xử lý bồi hoàn: 10-15 ngày làm việc.
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: LLM hallucinating. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Tighten system prompt, lower temperature; chạy lại evaluation để kiểm chứng.
@@ -170,21 +180,23 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu quy định về nghỉ phép đặc biệt (nghi_phep_dac_biet.md) và nói về số ngày nghỉ cho các sự kiện gia đình.
 
-- **Tang lễ** (cha mẹ, vợ/chồng, con): 3 ngày làm việc
-- **Sinh con** (nam giới): 5 ngày làm việc liên tục
-- **Con kết hôn**: 1 ngày làm việc
-## Hồ sơ cần thiết
+> - **Tang lễ** (cha mẹ, vợ/chồng, con): 3 ngày làm việc
+> - **Sinh con** (nam giới): 5 ngày làm việc liên tục
+> - **Con kết hôn**: 1 ngày làm việc
+> \## Hồ sơ cần thiết
+
 - Context 2: Đoạn văn thuộc tài liệu nghi_phep_nam_v2024.md, có hiệu lực thay thế phiên bản 1.0 từ ngày 01/01/2023, nói về số ngày phép năm của nhân viên chính thức.
 
-Mỗi nhân viên chính thức được hưởng **15 ngày phép năm** có lương, tăng từ 12 ngày so với chính sách năm 2023. Chính sách này thay thế hoàn toàn phiên bản 1.0 ban hành ngày 01/01/2023.
-## Thâm niên công tác
+> Mỗi nhân viên chính thức được hưởng **15 ngày phép năm** có lương, tăng từ 12 ngày so với chính sách năm 2023. Chính sách này thay thế hoàn toàn phiên bản 1.0 ban hành ngày 01/01/2023.
+> \## Thâm niên công tác
+
 - Context 3: Đoạn văn thuộc Chính sách nghỉ phép đặc biệt (phiên bản 1.1, hiệu lực 01/03/2024) quy định về số ngày nghỉ có lương trong trường hợp kết hôn.
 
-# Chính sách nghỉ phép đặc biệt
-> Phiên bản: 1.1 | Ngày hiệu lực: 01/03/2024 | Phòng ban: Nhân sự
-## Các trường hợp được nghỉ phép đặc biệt
-Nhân viên được nghỉ có lương trong các trường hợp sau đây mà không trừ vào phép năm:
-- **Kết hôn**: 3 ngày làm việc
+> \# Chính sách nghỉ phép đặc biệt
+> > Phiên bản: 1.1 | Ngày hiệu lực: 01/03/2024 | Phòng ban: Nhân sự
+> \## Các trường hợp được nghỉ phép đặc biệt
+> Nhân viên được nghỉ có lương trong các trường hợp sau đây mà không trừ vào phép năm:
+> - **Kết hôn**: 3 ngày làm việc
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: LLM hallucinating. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Tighten system prompt, lower temperature; chạy lại evaluation để kiểm chứng.
@@ -199,17 +211,19 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu Đào tạo nội bộ (dao_tao_noi_bo.md) và nói về quy định số lượng buổi đào tạo tối thiểu cũng như đối tượng bắt buộc tham gia.
 
-Mỗi phòng ban phải tổ chức tối thiểu **2 buổi đào tạo/quý** về chuyên môn hoặc kỹ năng mềm. Nhân viên mới (trong 6 tháng đầu) **bắt buộc** tham gia tất cả các buổi đào tạo của phòng ban.
-## Ngân sách đào tạo
+> Mỗi phòng ban phải tổ chức tối thiểu **2 buổi đào tạo/quý** về chuyên môn hoặc kỹ năng mềm. Nhân viên mới (trong 6 tháng đầu) **bắt buộc** tham gia tất cả các buổi đào tạo của phòng ban.
+> \## Ngân sách đào tạo
+
 - Context 2: Đoạn văn thuộc tài liệu quy định về thử việc, nói về thời gian thử việc tiêu chuẩn và cho các vị trí quản lý.
 
-Thời gian thử việc tiêu chuẩn là **60 ngày** kể từ ngày bắt đầu làm việc. Đối với vị trí quản lý cấp cao (Manager trở lên), thời gian thử việc có thể kéo dài đến 90 ngày.
-## Lương thử việc
+> Thời gian thử việc tiêu chuẩn là **60 ngày** kể từ ngày bắt đầu làm việc. Đối với vị trí quản lý cấp cao (Manager trở lên), thời gian thử việc có thể kéo dài đến 90 ngày.
+> \## Lương thử việc
+
 - Context 3: Đoạn văn thuộc tài liệu quy định về thử việc (thu_viec.md), nói về chế độ lương, phụ cấp và quyền lợi nghỉ phép của nhân viên thử việc.
 
-Nhân viên thử việc được nhận **85% mức lương** của cấp bậc tương ứng theo bảng lương công ty. Phụ cấp ăn trưa được áp dụng đầy đủ từ ngày đầu tiên.
-## Quyền lợi trong thử việc
-Nhân viên thử việc **KHÔNG được nghỉ phép năm**.
+> Nhân viên thử việc được nhận **85% mức lương** của cấp bậc tương ứng theo bảng lương công ty. Phụ cấp ăn trưa được áp dụng đầy đủ từ ngày đầu tiên.
+> \## Quyền lợi trong thử việc
+> Nhân viên thử việc **KHÔNG được nghỉ phép năm**.
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: LLM hallucinating. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Tighten system prompt, lower temperature; chạy lại evaluation để kiểm chứng.
@@ -224,18 +238,20 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu quy định truy cập vpn_truy_cap.md và nói về các nguyên tắc bảo mật khi sử dụng VPN.
 
-- Ngắt kết nối VPN khi không sử dụng
-- Không sử dụng VPN cá nhân (NordVPN, ExpressVPN) trong mạng công ty
-- Phiên VPN tự động ngắt sau 12 giờ, cần đăng nhập lại
+> - Ngắt kết nối VPN khi không sử dụng
+> - Không sử dụng VPN cá nhân (NordVPN, ExpressVPN) trong mạng công ty
+> - Phiên VPN tự động ngắt sau 12 giờ, cần đăng nhập lại
+
 - Context 2: Đoạn văn thuộc tài liệu 'lam_viec_tu_xa.md', quy định về chế độ làm việc từ xa và các yêu cầu kỹ thuật liên quan.
 
-Nhân viên chính thức được phép làm việc từ xa tối đa **2 ngày/tuần**. Lịch WFH phải được đăng ký và phê duyệt bởi quản lý trực tiếp vào **thứ Hai** đầu tuần.
-## Yêu cầu kỹ thuật
-- Kết nối **VPN** bắt buộc khi làm việc từ xa
+> Nhân viên chính thức được phép làm việc từ xa tối đa **2 ngày/tuần**. Lịch WFH phải được đăng ký và phê duyệt bởi quản lý trực tiếp vào **thứ Hai** đầu tuần.
+> \## Yêu cầu kỹ thuật
+> - Kết nối **VPN** bắt buộc khi làm việc từ xa
+
 - Context 3: Đoạn văn thuộc tài liệu vpn_truy_cap.md, quy định về việc sử dụng và quản lý tài khoản VPN của công ty.
 
-Công ty sử dụng **WireGuard VPN** với mã hóa xác thực **ChaCha20-Poly1305**. Tất cả kết nối từ xa bắt buộc qua VPN. Nhân viên tải cấu hình VPN từ IT Portal hoặc liên hệ helpdesk@cty.vn.
-## Quản lý tài khoản VPN
+> Công ty sử dụng **WireGuard VPN** với mã hóa xác thực **ChaCha20-Poly1305**. Tất cả kết nối từ xa bắt buộc qua VPN. Nhân viên tải cấu hình VPN từ IT Portal hoặc liên hệ helpdesk@cty.vn.
+> \## Quản lý tài khoản VPN
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: Answer doesn't match question. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Improve prompt template; chạy lại evaluation để kiểm chứng.
@@ -254,15 +270,17 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu quy trình bảo mật sự cố, quy định về thời hạn và kênh thông báo khi phát hiện rủi ro an ninh mạng.
 
-Khi phát hiện hoặc nghi ngờ sự cố bảo mật, nhân viên **phải báo cáo trong vòng 1 giờ** qua email **helpdesk@cty.vn** hoặc hotline CNTT nội bộ (ext. 9999). Tuyệt đối **không tự ý xử lý malware** hoặc tìm cách khắc phục mà không có sự hướng dẫn của đội CNTT.
+> Khi phát hiện hoặc nghi ngờ sự cố bảo mật, nhân viên **phải báo cáo trong vòng 1 giờ** qua email **helpdesk@cty.vn** hoặc hotline CNTT nội bộ (ext. 9999). Tuyệt đối **không tự ý xử lý malware** hoặc tìm cách khắc phục mà không có sự hướng dẫn của đội CNTT.
+
 - Context 2: Đoạn văn thuộc chính sách phân loại dữ liệu và bảo mật sự cố, quy định về việc xử lý và bảo vệ thông tin Tối mật.
 
-thông tin liên quan mã nguồn core, bí mật thương mại hoặc kế hoạch M&A thuộc **Tối mật** theo chính sách phân loại dữ liệu.
-Chỉ chia sẻ cho người cần xử lý theo nguyên tắc need-to-know, không đăng rộng rãi trên các kênh Slack nội bộ.
-## Trách nhiệm
+> thông tin liên quan mã nguồn core, bí mật thương mại hoặc kế hoạch M&A thuộc **Tối mật** theo chính sách phân loại dữ liệu.
+> Chỉ chia sẻ cho người cần xử lý theo nguyên tắc need-to-know, không đăng rộng rãi trên các kênh Slack nội bộ.
+> \## Trách nhiệm
+
 - Context 3: Đoạn văn thuộc quy chế bảo mật, quy định về hình thức kỷ luật khi nhân viên không báo cáo hoặc tự ý xử lý sự cố.
 
-Không báo cáo sự cố hoặc tự ý xử lý sẽ bị xem là vi phạm nghiêm trọng quy chế bảo mật và có thể bị kỷ luật theo mức cảnh cáo hoặc sa thải.
+> Không báo cáo sự cố hoặc tự ý xử lý sẽ bị xem là vi phạm nghiêm trọng quy chế bảo mật và có thể bị kỷ luật theo mức cảnh cáo hoặc sa thải.
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: LLM hallucinating. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Tighten system prompt, lower temperature; chạy lại evaluation để kiểm chứng.
@@ -277,18 +295,20 @@ Contexts đã truy xuất:
 
 - Context 1: Đoạn văn thuộc tài liệu mua sắm thiết bị CNTT (tài liệu mua_sam.md), nói về quy định kỹ thuật và thủ tục cho đơn hàng khẩn cấp.
 
-Mua sắm thiết bị CNTT (laptop, server, phần mềm) cần có xác nhận của phòng CNTT về cấu hình kỹ thuật trước khi đề xuất. Đơn hàng khẩn cấp có thể bỏ qua yêu cầu 3 báo giá nhưng phải có giải trình bằng văn bản.
+> Mua sắm thiết bị CNTT (laptop, server, phần mềm) cần có xác nhận của phòng CNTT về cấu hình kỹ thuật trước khi đề xuất. Đơn hàng khẩn cấp có thể bỏ qua yêu cầu 3 báo giá nhưng phải có giải trình bằng văn bản.
+
 - Context 2: Đoạn văn thuộc quy định về tạm ứng, trình bày về thẩm quyền phê duyệt các mức tiền tạm ứng khác nhau trong doanh nghiệp.
 
-Tạm ứng dưới 5.000.000 VNĐ: trưởng phòng phê duyệt. Từ 5.000.000 VNĐ trở lên: cần thêm phê duyệt Kế toán trưởng.
+> Tạm ứng dưới 5.000.000 VNĐ: trưởng phòng phê duyệt. Từ 5.000.000 VNĐ trở lên: cần thêm phê duyệt Kế toán trưởng.
+
 - Context 3: Đoạn văn thuộc Quy trình mua sắm (Phiên bản 2.2, hiệu lực từ 01/04/2024) quy định về thẩm quyền phê duyệt đơn hàng.
 
-# Quy trình mua sắm
-> Phiên bản: 2.2 | Ngày hiệu lực: 01/04/2024 | Phòng ban: Hành chính & Tài chính
-## Thẩm quyền phê duyệt
-| Giá trị đơn hàng | Người phê duyệt |
-|-------------------|-----------------|
-| Dưới **5.000.000 VNĐ** | Trưởng phòng (Manager) |
+> \# Quy trình mua sắm
+> > Phiên bản: 2.2 | Ngày hiệu lực: 01/04/2024 | Phòng ban: Hành chính & Tài chính
+> \## Thẩm quyền phê duyệt
+> | Giá trị đơn hàng | Người phê duyệt |
+> |-------------------|-----------------|
+> | Dưới **5.000.000 VNĐ** | Trưởng phòng (Manager) |
 
 Giả thuyết cần kiểm chứng: Giả thuyết theo metric: Missing relevant chunks. Cần đối chiếu answer, contexts và reference.
 Cải tiến đề xuất: Improve chunking or add BM25; chạy lại evaluation để kiểm chứng.
@@ -308,12 +328,11 @@ Nhóm multi_hop có avg_score trung bình thấp nhất (0.7098). context_recall
 
 Adversarial mean=0.743413; factual mean=0.918184; điều kiện số liệu adversarial < factual: đạt.
 
-Bẫy có sẵn trong corpus gồm phép năm v2023/v2024, mật khẩu v1/v2, phủ định quyền lợi thử việc và việc cấm VPN cá nhân. Cần đối chiếu các contexts đã lấy và answer để phân biệt retrieval sai phiên bản với generation bỏ qua điều kiện. Chênh lệch mean không tự chứng minh pipeline nhận ra version conflict và chưa đủ kết luận bonus.
+Bẫy có sẵn trong corpus gồm phép năm v2023/v2024, mật khẩu v1/v2, phủ định quyền lợi thử việc và việc cấm VPN cá nhân. Cần đối chiếu các contexts đã lấy và answer để phân biệt retrieval sai phiên bản với generation bỏ qua điều kiện. Chênh lệch mean chỉ cho thấy nhóm adversarial khó hơn, không tự chứng minh pipeline nhận ra version conflict; vì vậy phần “Bẫy phiên bản và điều kiện bonus A” bên dưới phân tích từng bẫy bằng case thật (41, 44, 48, 50, 49) để chỉ ra lỗi nằm ở retrieval hay generation.
 
 Nếu context thiếu thông tin, thử chunking/hybrid search/top-k; nếu context nhiễu, thử reranking/metadata phiên bản; nếu context đúng mà answer sai, siết prompt và yêu cầu trích dẫn. Chỉ chọn cải tiến sau khi đọc bằng chứng, chạy lại trên cùng 50 câu, so sánh bốn metric và kiểm tra không làm giảm chất lượng nhóm khác.
 
 Giới hạn: 50 câu, điểm phụ thuộc evaluator/model và generation fallback; worst_metric không phải kết luận nhân quả. Nhận xét nguyên nhân cụ thể đã được đối chiếu ở phần dưới; các đề xuất cải tiến chưa được triển khai/chạy lại trong lần evaluation này. AI hỗ trợ mã và tổng hợp số liệu; không tạo số đo hoặc thay answer bằng ground truth.
-
 
 ## Phân tích nguyên nhân đã đối chiếu từ bằng chứng thật
 
@@ -398,7 +417,11 @@ phân tích bằng case thật bên dưới. Quyết định điểm cuối do n
   requirements/requirements-phase-a.txt; không thay environment Python chung.
 - Evaluator LLM dùng model ID cấu hình ag/gemini-3.8-flash qua endpoint người
   dùng cung cấp; embedding local BAAI/bge-m3. Generation của 50 answers đã lưu
-  là gpt-4o-mini-2024-07-18, không phải Gemini evaluator.
+  là gpt-4o-mini-2024-07-18, không phải Gemini evaluator. `ag/gemini-3.8-flash`
+  là tên model đã cấu hình và được m4 ghi lại, gửi tới endpoint OpenAI-compatible
+  tự cấu hình (không phải endpoint mặc định của Google trong `config.py`). Tên này
+  do endpoint đó định nghĩa; nhóm chưa xác minh model gốc phía sau, nên điểm
+  RAGAS có thể khác khi chạy với evaluator chính thức.
 - RAGAS 0.1.22 chạy bốn metric trên đủ 50 câu, 200 phép đo; answer_relevancy
   strictness=1 do endpoint Gemini không hỗ trợ n>1 trong adapter. Đây là một
   lượt evaluation; chưa đo độ biến thiên giữa các lượt/model/prompt.

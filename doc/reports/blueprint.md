@@ -9,7 +9,7 @@ Nguồn kết quả: artifacts/ragas_50q.json, judge_results.json, guard_results
 Run timestamp Phase C: 2026-10-12T09:15:56Z (`guard_results.json`); Phase A: 2026-10-12T09:52:54.986101+00:00 (`ragas_50q.json`); Phase B: 2026-10-12T11:49:46.317796+00:00 (`judge_results.json`);
 guard models: `gpt-4o-mini` (NeMo self-check input/output).
 Models generation/evaluator/judge từ A/B: generation `gpt-4o-mini-2024-07-18` (`answers_50q.json`);
-evaluator A: `ag/gemini-3.8-flash` và `BAAI/bge-m3` (`ragas_50q.json`); judge B: `gemini-flash` (`judge_results.json`, đặt qua `JUDGE_MODEL` trong `.env`).
+evaluator A: `ag/gemini-3.8-flash` và `BAAI/bge-m3` (`ragas_50q.json`); judge B: `gemini-flash` (`judge_results.json`; alias của proxy WebAI-to-API local, chưa xác minh model gốc — xem `bias_report.md`).
 
 ## Kiến trúc và failure action
 
