@@ -110,17 +110,41 @@ def judge_binary(question, answer, reference, *, client=None):
     if client is None:
         from openai import OpenAI
         client = OpenAI()
-    response = client.chat.completions.create(
-        model=JUDGE_MODEL, temperature=0,
-        response_format={"type": "json_object"},
-        messages=[
+    import time
+    response = None
+    kwargs = {
+        "model": JUDGE_MODEL,
+        "temperature": 0,
+        "response_format": {"type": "json_object"},
+        "messages": [
             {"role": "system", "content": BINARY_SYSTEM_PROMPT},
             {"role": "user", "content": json.dumps(
                 {"question": question, "answer": answer, "reference": reference},
                 ensure_ascii=False)},
         ],
-    )
-    result = json.loads(response.choices[0].message.content)
+    }
+    for attempt in range(6):
+        try:
+            response = client.chat.completions.create(**kwargs)
+            break
+        except Exception as e:
+            if "unsupported_parameter" in str(e) or "response_format" in str(e):
+                kwargs.pop("response_format", None)
+                kwargs.pop("temperature", None)
+                response = client.chat.completions.create(**kwargs)
+                break
+            elif ("429" in str(e) or "RateLimit" in type(e).__name__ or "RESOURCE_EXHAUSTED" in str(e)) and attempt < 5:
+                time.sleep(15)
+            else:
+                raise
+    content = response.choices[0].message.content.strip()
+    if content.startswith("```json"):
+        content = content[7:]
+    elif content.startswith("```"):
+        content = content[3:]
+    if content.endswith("```"):
+        content = content[:-3]
+    result = json.loads(content.strip())
     if type(result.get("label")) is not int or result["label"] not in (0, 1):
         raise ValueError("Binary judge label must be integer 0 or 1.")
     if not isinstance(result.get("reasoning"), str) or not result["reasoning"].strip():
