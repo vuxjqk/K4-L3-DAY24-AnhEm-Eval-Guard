@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import (TEST_SET_PATH, GEMINI_API_KEY, GEMINI_MODEL, GEMINI_OPENAI_BASE_URL,
-                    EMBEDDING_QUERY_PREFIX)
+                    EMBEDDING_QUERY_PREFIX, EMBEDDING_MODEL)
 
 
 @dataclass
@@ -36,7 +36,8 @@ def evaluate_ragas(questions: list[str], answers: list[str],
                    contexts: list[list[str]], ground_truths: list[str]) -> dict:
     """Run RAGAS evaluation."""
     metric_names = ["faithfulness", "answer_relevancy", "context_precision", "context_recall"]
-    zeros = {m: 0.0 for m in metric_names}
+    if not questions or not (len(questions) == len(answers) == len(contexts) == len(ground_truths)):
+        raise ValueError("RAGAS inputs must be non-empty lists of equal length.")
     try:
         from ragas import evaluate
         from ragas.metrics import faithfulness, answer_relevancy, context_precision, context_recall
@@ -75,10 +76,10 @@ def evaluate_ragas(questions: list[str], answers: list[str],
         for m in metric_names:
             vals = [getattr(r, m) for r in per_question if getattr(r, m) == getattr(r, m)]
             aggregate[m] = sum(vals) / len(vals) if vals else 0.0
-        return {**aggregate, "per_question": per_question}
+        return {**aggregate, "per_question": per_question,
+                "metadata": {"evaluator_models": [GEMINI_MODEL, EMBEDDING_MODEL]}}
     except Exception as e:
-        print(f"  ⚠️  RAGAS evaluation failed: {e}")
-        return {**zeros, "per_question": []}
+        raise RuntimeError("RAGAS evaluation failed; no valid results were produced.") from e
 
 
 def _get_ragas_models():

@@ -95,10 +95,11 @@ class DenseSearch:
     def search(self, query: str, top_k: int = DENSE_TOP_K, collection: str = COLLECTION_NAME) -> list[SearchResult]:
         """Search using dense vectors."""
         query_vector = self._get_encoder().encode(EMBEDDING_QUERY_PREFIX + query, normalize_embeddings=True).tolist()
-        response = self.client.query_points(collection, query=query_vector, limit=top_k)
+        # qdrant-client được pin <1.10 (chưa có query_points) → dùng search()
+        points = self.client.search(collection, query_vector=query_vector, limit=top_k)
         return [SearchResult(text=pt.payload["text"], score=float(pt.score),
                              metadata={k: v for k, v in pt.payload.items() if k != "text"}, method="dense")
-                for pt in response.points]
+                for pt in points]
 
     def _dim(self) -> int:
         return self._get_encoder().get_sentence_embedding_dimension() or EMBEDDING_DIM
@@ -111,8 +112,11 @@ def get_encoder():
     """SentenceTransformer dùng chung (DenseSearch + RAGAS embeddings) — chỉ load 1 lần để tiết kiệm RAM."""
     global _encoder
     if _encoder is None:
+        import torch
         from sentence_transformers import SentenceTransformer
-        _encoder = SentenceTransformer(EMBEDDING_MODEL)
+        from config import MODEL_DTYPE
+        _encoder = SentenceTransformer(EMBEDDING_MODEL,
+                                       model_kwargs={"torch_dtype": getattr(torch, MODEL_DTYPE)})
     return _encoder
 
 
