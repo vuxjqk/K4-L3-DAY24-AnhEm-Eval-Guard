@@ -12,6 +12,8 @@ import time
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import ADVERSARIAL_SET_PATH, GUARDRAILS_CONFIG_DIR, LATENCY_BUDGET_P95_MS, PRESIDIO_LANGUAGE
 
+PII_ENTITIES = ["VN_CCCD", "VN_PHONE", "EMAIL_ADDRESS", "PHONE_NUMBER"]
+
 
 # ─── Task 9a: Presidio PII Detection ─────────────────────────────────────────
 
@@ -62,7 +64,10 @@ def pii_scan(text: str, analyzer=None, anonymizer=None) -> dict:
     if analyzer is None or anonymizer is None:
         analyzer, anonymizer = setup_presidio()
 
-    results = analyzer.analyze(text=text, language=PRESIDIO_LANGUAGE)
+    # Chỉ quét các loại PII của bài; recognizer mặc định (PERSON, US_*...) của spaCy en
+    # bắt nhầm cụm tiếng Việt như "Xin lỗi", "bao nhiêu" và chặn cả câu sạch.
+    results = [r for r in analyzer.analyze(text=text, language=PRESIDIO_LANGUAGE)
+               if r.entity_type in PII_ENTITIES]
     if not results:
         return {"has_pii": False, "entities": [], "anonymized": text}
 
