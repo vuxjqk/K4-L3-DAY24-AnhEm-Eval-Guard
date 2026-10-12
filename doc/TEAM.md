@@ -127,9 +127,21 @@ hoặc pip resolve để khẳng định runtime đã chạy.
 - Cách kiểm tra: script kiểm tra answers (50 id/thứ tự khớp test set, 20/20/10, contexts không rỗng,
   50/50 llm, không trùng ground_truth, không chứa `sk-`/`AIza`, jsonschema OK); sau merge `pytest tests/ -q`:
   102 passed, 11 failed (toàn bộ ở `test_phase_c.py` cho Tasks 9a–11 chưa làm; test Task 12 pass).
-- Điều đã học: {{Khái niệm và cách thể hiện trong bài}}.
-- Giới hạn/cách xử lý: {{Vấn đề và kiểm chứng}}.
-- Nguồn/AI hỗ trợ nếu có: {{Công cụ, phạm vi, cách tự kiểm chứng}}.
+  Sau khi merge Phase C: `pytest tests/ -q` → 113 passed; `check_lab.py` PASS answers_50q.json và Phase C artifact.
+- Điều đã học: latency phải xác định rõ scope trước khi đo. Task 12 chỉ đo input layers tuần tự
+  (Presidio + NeMo input, warm-up bị loại, percentile tuyến tính), nên P95 815ms không được dùng làm
+  full-guard latency; số liệu còn cho thấy bottleneck là lượt gọi LLM của NeMo (~99%), không phải Presidio.
+  Provenance quan trọng ngang kết quả: answers phải ghi `generation_mode`/`generation_model`, Phase A phải
+  lấy `evaluator_models` từ chính m4 thay vì đoán từ JUDGE_MODEL. Unit test với mock không chứng minh
+  runtime chạy: Presidio thật bắt nhầm tiếng Việt (7/8 clean bị chặn) dù mock test đã pass.
+- Giới hạn/cách xử lý: máy 8GB RAM không load đồng thời bge-m3 + bge-reranker-v2-m3 ở fp32 (lỗi
+  `memory allocation ... failed`); thêm tùy chọn `MODEL_DTYPE=float16` nhưng fp16 trên CPU chậm ~6 lần
+  (index 657.7s so với 101.9s), nên chạy bản chính thức trên máy 32GB ở fp32. `qdrant-client` pin `<1.10`
+  không có `query_points` → đổi sang `client.search` (kiểm chứng bằng lượt setup chạy hết 50 câu).
+  m5 enrichment đôi khi nhận JSON hỏng từ Gemini; chunk đó tự fallback về text gốc.
+- Nguồn/AI hỗ trợ nếu có: Claude Code hỗ trợ đọc đề, chia việc, viết Task 12, sửa m2/m4/config, chạy và
+  theo dõi setup. Tự kiểm chứng bằng `pytest`, `check_lab.py`, script kiểm tra answers và đối chiếu số
+  latency với raw samples trong `guard_results.json`.
 
 ### TranVoHoangNguyen-2A202602551
 
