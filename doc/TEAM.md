@@ -16,14 +16,14 @@ Mỗi nhóm nộp một repo. Điền đủ thành viên và một mục INDIVID
 
 | STT | Họ và tên | MSSV | Vai trò / công việc thật | Bằng chứng |
 |---|---|---|---|---|
-| 1 | Trần Anh Vũ | 2A202602570 | Trưởng nhóm, phụ trách tích hợp: setup answers 50q, adapter m4 `evaluator_models`, Task 12 `measure_p95_latency` (`src/phase_c_guard.py`), Task 13 `doc/reports/blueprint.md`, TEAM, check_lab, nộp bài | {{Commit/PR}}, `artifacts/answers_50q.json`, `doc/reports/blueprint.md` |
-| 2 | Trần Võ Hoàng Nguyên | 2A202602551 | Phase A, RAGAS: Tasks 1–4 trong `src/phase_a_ragas.py`, chạy Phase A live, viết failure_clusters | PR #1; nhánh codex/phase-a-hoang-nguyen, `artifacts/ragas_50q.json`, `doc/reports/failure_clusters.md` |
-| 3 | Trần Tuấn Cường | 2A202602717 | Phase B, LLM judge: Tasks 5–8 trong `src/phase_b_judge.py`, chạy Phase B live, viết bias_report | {{Commit/PR}}, `artifacts/judge_results.json`, `doc/reports/bias_report.md` |
-| 4 | Nguyễn Đức Thịnh | 2A202602468 | Phase C, Guardrails: Tasks 9a, 9b, 10, 11 trong `src/phase_c_guard.py`, tinh chỉnh `guardrails/`, chạy Phase C live | {{Commit/PR}}, `artifacts/guard_results.json` |
+| 1 | Trần Anh Vũ | 2A202602570 | Trưởng nhóm, phụ trách tích hợp: setup answers 50q, adapter m4 `evaluator_models`, Task 12 `measure_p95_latency` (`src/phase_c_guard.py`), Task 13 `doc/reports/blueprint.md`, TEAM, check_lab, nộp bài | `34b1bad` (answers), `50f550e` (m4 + Task 12), `ad208a6` (m2/m3 fix), merge `4404f72`; `artifacts/answers_50q.json`, `doc/reports/blueprint.md` |
+| 2 | Trần Võ Hoàng Nguyên | 2A202602551 | Phase A, RAGAS: Tasks 1–4 trong `src/phase_a_ragas.py`, chạy Phase A live, viết failure_clusters | `74e6215` (PR #1), `3760186` (RAGAS live và report); `artifacts/ragas_50q.json`, `doc/reports/failure_clusters.md` |
+| 3 | Trần Tuấn Cường | 2A202602717 | Phase B, LLM judge: Tasks 5–8 trong `src/phase_b_judge.py`, chạy Phase B live, viết bias_report | `cc0ea2d` (PR #2); `artifacts/judge_results.json`, `doc/reports/bias_report.md` |
+| 4 | Nguyễn Đức Thịnh | 2A202602468 | Phase C, Guardrails: Tasks 9a, 9b, 10, 11 trong `src/phase_c_guard.py`, tinh chỉnh `guardrails/`, chạy Phase C live | `855a44b` (nhánh `Thihn/task3`); `artifacts/guard_results.json` |
 
 Người tích hợp/chạy batch/nộp link: Trần Anh Vũ — sinh answers, merge PR các
 phase, chạy `python scripts/check_lab.py --with-tests`, push và nộp link.
-Bằng chứng: {{Commit merge / PR}}.
+Bằng chứng: PR #1, PR #2 (merge Phase A/B), merge `4404f72` (lead → main: answers, Task 12, fix m2/m3).
 
 ## Chi tiết phân công (khung bám theo)
 
@@ -91,9 +91,22 @@ Chạy: `python -m pytest tests/test_phase_c.py -q` rồi
 
 ## Môi trường và chuẩn bị trước lớp
 
-OS/Python/compiler: Windows 11 Pro, Python 3.11.9, {{compiler}}.
-Virtualenv/dependencies/imports: {{Lệnh và kết quả}}.
-Models/Qdrant/50 answers đã chuẩn bị: {{Bằng chứng và giới hạn/fallback}}.
+OS/Python/compiler: Windows 11 Pro 10.0.26300, Python 3.11.9, Microsoft Visual Studio 2022 Build Tools
+(workload VCTools/MSVC + Windows SDK; cần để build `annoy==1.17.3`, lần cài đầu không có compiler nên lỗi
+`Microsoft Visual C++ 14.0 or greater is required`).
+Virtualenv/dependencies/imports: `py -3.11 -m venv .venv`; `pip install -r requirements/requirements.txt
+-c requirements/constraints-core.txt` thành công sau khi có MSVC; `pip check`: No broken requirements.
+Import `ragas` lỗi `pyarrow requires NumPy 2.0 or newer, found 1.26.4` (pip kéo pyarrow 26, constraints
+pin numpy 1.26.4 nhưng không pin pyarrow) → cài `pyarrow<20` (19.0.1) trong venv; sau đó
+`import ragas, nemoguardrails, presidio_analyzer, spacy; from google import genai` → imports OK.
+`python -m spacy download en_core_web_lg` OK. `pytest tests/ -m support -q`: 60 passed.
+Models/Qdrant/50 answers đã chuẩn bị: Qdrant `qdrant/qdrant:v1.9.7` qua `infra/docker-compose.yml`
+(`curl localhost:6333/collections` → status ok). `python scripts/setup_answers.py --live` (fp32, RAM trống
+17.3/31.8 GB, không đặt MODEL_DTYPE): 114 chunks enrich 0 lỗi, index BM25 + bge-m3 548.5s, reranker
+bge-reranker-v2-m3, 50 queries 679.6s. Kết quả: 50/50 `generation_mode=llm`, `generation_model=
+gpt-4o-mini-2024-07-18`, 0 extractive_fallback, mỗi câu 3 contexts, không answer nào trùng ground_truth,
+validate `doc/schemas/answers.schema.json` OK (commit `34b1bad`). Giới hạn: bỏ qua 2 PDF scan ảnh không có
+text layer (BCTC.pdf, Nghị định 13/2023) vì chưa OCR; 9/50 answers là “Không tìm thấy”.
 Nếu cài full NeMo chưa thành công, ghi lỗi thực tế; không dùng unit test pass
 hoặc pip resolve để khẳng định runtime đã chạy.
 
@@ -101,12 +114,34 @@ hoặc pip resolve để khẳng định runtime đã chạy.
 
 ### TranAnhVu-2A202602570
 
-- Phần được giao và phần thực tế đã làm: {{Setup answers, adapter m4, Task 12, blueprint, tích hợp/nộp}}.
-- Bằng chứng: {{Commit/PR; artifacts/answers_50q.json, doc/reports/blueprint.md}}.
-- Cách kiểm tra: {{Lệnh setup/check_lab và kết quả}}.
-- Điều đã học: {{Khái niệm và cách thể hiện trong bài}}.
-- Giới hạn/cách xử lý: {{Vấn đề và kiểm chứng}}.
-- Nguồn/AI hỗ trợ nếu có: {{Công cụ, phạm vi, cách tự kiểm chứng}}.
+- Phần được giao và phần thực tế đã làm: dựng môi trường full runtime (Python 3.11, MSVC, Qdrant, spaCy);
+  sinh `artifacts/answers_50q.json` bằng `setup_answers.py --live`; adapter m4 trả
+  `metadata.evaluator_models` = [GEMINI_MODEL, EMBEDDING_MODEL]; Task 12 `measure_p95_latency` (engines tạo
+  trước, 2 warm-up thật, luôn đo Presidio rồi NeMo input, không short-circuit); fix m2 dense search cho
+  qdrant-client 1.9 và tùy chọn fp16 cho m2/m3; merge lead → main; viết blueprint; tích hợp/nộp.
+  Khi tích hợp Phase C: phát hiện `pii_scan` dùng mọi recognizer mặc định (PERSON/US_* bắt nhầm tiếng
+  Việt, 7/8 câu clean bị chặn khi chạy Presidio thật) → chỉ giữ VN_CCCD/VN_PHONE/EMAIL/PHONE; chỉnh
+  `self_check_input`; chạy Phase C live (attacks 20/20, clean 8/8, output 4/4, input guard P95 815.47ms).
+- Bằng chứng: commits `50f550e`, `ad208a6`, `34b1bad`, `ea078a1` (fix Phase C), merge `4404f72`; `artifacts/answers_50q.json`,
+  `doc/reports/blueprint.md`.
+- Cách kiểm tra: script kiểm tra answers (50 id/thứ tự khớp test set, 20/20/10, contexts không rỗng,
+  50/50 llm, không trùng ground_truth, không chứa `sk-`/`AIza`, jsonschema OK); sau merge `pytest tests/ -q`:
+  102 passed, 11 failed (toàn bộ ở `test_phase_c.py` cho Tasks 9a–11 chưa làm; test Task 12 pass).
+  Sau khi merge Phase C: `pytest tests/ -q` → 113 passed; `check_lab.py` PASS answers_50q.json và Phase C artifact.
+- Điều đã học: latency phải xác định rõ scope trước khi đo. Task 12 chỉ đo input layers tuần tự
+  (Presidio + NeMo input, warm-up bị loại, percentile tuyến tính), nên P95 815ms không được dùng làm
+  full-guard latency; số liệu còn cho thấy bottleneck là lượt gọi LLM của NeMo (~99%), không phải Presidio.
+  Provenance quan trọng ngang kết quả: answers phải ghi `generation_mode`/`generation_model`, Phase A phải
+  lấy `evaluator_models` từ chính m4 thay vì đoán từ JUDGE_MODEL. Unit test với mock không chứng minh
+  runtime chạy: Presidio thật bắt nhầm tiếng Việt (7/8 clean bị chặn) dù mock test đã pass.
+- Giới hạn/cách xử lý: máy 8GB RAM không load đồng thời bge-m3 + bge-reranker-v2-m3 ở fp32 (lỗi
+  `memory allocation ... failed`); thêm tùy chọn `MODEL_DTYPE=float16` nhưng fp16 trên CPU chậm ~6 lần
+  (index 657.7s so với 101.9s), nên chạy bản chính thức trên máy 32GB ở fp32. `qdrant-client` pin `<1.10`
+  không có `query_points` → đổi sang `client.search` (kiểm chứng bằng lượt setup chạy hết 50 câu).
+  m5 enrichment đôi khi nhận JSON hỏng từ Gemini; chunk đó tự fallback về text gốc.
+- Nguồn/AI hỗ trợ nếu có: Claude Code hỗ trợ đọc đề, chia việc, viết Task 12, sửa m2/m4/config, chạy và
+  theo dõi setup. Tự kiểm chứng bằng `pytest`, `check_lab.py`, script kiểm tra answers và đối chiếu số
+  latency với raw samples trong `guard_results.json`.
 
 ### TranVoHoangNguyen-2A202602551
 
@@ -128,12 +163,12 @@ hoặc pip resolve để khẳng định runtime đã chạy.
 
 ### NguyenDucThinh-2A202602468
 
-- Phần được giao và phần thực tế đã làm: {{Tasks 9a, 9b, 10, 11 trong src/phase_c_guard.py, guardrails config}}.
-- Bằng chứng: {{Commit/PR; artifacts/guard_results.json}}.
-- Cách kiểm tra: {{pytest tests/test_phase_c.py, run_experiments --phase c --live và kết quả}}.
-- Điều đã học: {{Khái niệm và cách thể hiện trong bài}}.
-- Giới hạn/cách xử lý: {{Vấn đề và kiểm chứng}}.
-- Nguồn/AI hỗ trợ nếu có: {{Công cụ, phạm vi, cách tự kiểm chứng}}.
+- Phần được giao và phần thực tế đã làm: Tasks 9a, 9b, 10, 11 trong `src/phase_c_guard.py`, cấu hình `guardrails/config.yml` và `guardrails/rails.co`.
+- Bằng chứng: Nhánh `Thihn/task3`, source `src/phase_c_guard.py`, 12/12 unit tests passed (`tests/test_phase_c.py`), `artifacts/guard_results.json`.
+- Cách kiểm tra: `python -m pytest tests/test_phase_c.py -v`, `python scripts/check_lab.py`, `python scripts/run_experiments.py --phase c --live --latency-samples 20`.
+- Điều đã học: Presidio PII scanning với custom regex VN (CCCD/CMND/SĐT), NeMo Guardrails Colang 1.0 tự kiểm tra input/output rail bằng self-check prompts, đo độ trễ tuần tự P95 cho input layer.
+- Giới hạn/cách xử lý: Chạy NeMo input rail tốn thời gian; tối ưu thực thi async gom trong một event loop duy nhất để tránh treo trên Windows; tinh chỉnh prompt self-check để không chặn nhầm 8 câu clean input.
+- Nguồn/AI hỗ trợ nếu có: Antigravity AI hỗ trợ sinh mã mẫu theo spec, tự kiểm chứng bằng test suite `tests/test_phase_c.py` và `scripts/check_lab.py`.
 
 ## Cập nhật sau khi nộp
 
