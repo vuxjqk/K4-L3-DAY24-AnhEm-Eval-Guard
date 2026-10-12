@@ -30,8 +30,11 @@ class CrossEncoderReranker:
     def _load_model(self):
         if self._model is None:
             # Dùng sentence_transformers.CrossEncoder (FlagReranker crash với transformers>=5.0)
+            import torch
             from sentence_transformers import CrossEncoder
-            self._model = CrossEncoder(self.model_name, max_length=512)
+            from config import MODEL_DTYPE
+            self._model = CrossEncoder(self.model_name, max_length=512,
+                                       model_kwargs={"torch_dtype": getattr(torch, MODEL_DTYPE)})
         return self._model
 
     def rerank(self, query: str, documents: list[dict], top_k: int = RERANK_TOP_K) -> list[RerankResult]:
