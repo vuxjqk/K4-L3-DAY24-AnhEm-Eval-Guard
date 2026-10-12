@@ -59,6 +59,8 @@ EMBEDDING_QUERY_PREFIX = "query: " if _IS_E5 else ""
 EMBEDDING_PASSAGE_PREFIX = "passage: " if _IS_E5 else ""
 
 RERANKER_MODEL = os.getenv("RERANKER_MODEL", "BAAI/bge-reranker-v2-m3")
+# Máy ít RAM (<8GB): đặt MODEL_DTYPE=float16 để bge-m3 + reranker dùng ~1/2 bộ nhớ
+MODEL_DTYPE = os.getenv("MODEL_DTYPE", "float32")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "") or os.getenv("GOOGLE_API_KEY", "")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
