@@ -8,7 +8,7 @@ Trưởng nhóm/người nộp: Trần Anh Vũ — 2A202602570
 
 Ngày lab/deadline áp dụng: 12/10/2026, 23:59 — Asia/Ho_Chi_Minh (UTC+07:00)
 
-Commit dùng để chấm: {{Commit SHA — trưởng nhóm điền sau khi chốt bản nộp}}
+Commit dùng để chấm: `b643ff8` (commit nội dung cuối; commit kế tiếp chỉ điền SHA này)
 
 Mỗi nhóm nộp một repo. Điền đủ thành viên và một mục INDIVIDUAL cho từng người.
 
@@ -41,21 +41,21 @@ Quy trình chung cho mọi thành viên:
 
 | Thứ tự | Việc | File / lệnh | Tiêu chí xong |
 |---|---|---|---|
-| 1 | Sinh 50 answers (**làm đầu tiên**: Phase A và B phụ thuộc file này) | `python scripts/setup_answers.py --live` | Đúng 50 id, chia 20/20/10; ghi `generation_mode` và `generation_model`; answer không chép từ ground_truth |
-| 2 | Kiểm tra adapter m4 | `src/m4_eval.py` | `metadata.evaluator_models` liệt kê model thật được dùng, không lấy JUDGE_MODEL thay |
-| 3 | Task 12 `measure_p95_latency` | `src/phase_c_guard.py` | Tạo engines trước khi đo; warm-up 2 lượt bị loại khỏi samples; ≥20 samples; mỗi sample chạy Presidio rồi NeMo input, không short-circuit |
-| 4 | Review và merge PR phase-a/b/c | GitHub | Merge Phase C của Thịnh trước, sau đó merge Task 12 để tránh conflict |
-| 5 | Task 13 Blueprint | `doc/reports/blueprint.md` | Có kiến trúc, failure actions, CI gates và monitoring (ghi rõ là đề xuất); có latency input layers đã đo; phần chưa đo ghi “chưa đo” |
-| 6 | Đóng gói và nộp | `python scripts/check_lab.py --with-tests` | Checker pass; điền commit SHA ở đầu file; nộp link |
+| B1 | Sinh 50 answers (**làm đầu tiên**: Phase A và B phụ thuộc file này) | `python scripts/setup_answers.py --live` | Đúng 50 id, chia 20/20/10; ghi `generation_mode` và `generation_model`; answer không chép từ ground_truth |
+| B2 | Kiểm tra adapter m4 | `src/m4_eval.py` | `metadata.evaluator_models` liệt kê model thật được dùng, không lấy JUDGE_MODEL thay |
+| B3 | Task 12 `measure_p95_latency` | `src/phase_c_guard.py` | Tạo engines trước khi đo; warm-up 2 lượt bị loại khỏi samples; ≥20 samples; mỗi sample chạy Presidio rồi NeMo input, không short-circuit |
+| B4 | Review và merge PR phase-a/b/c | GitHub | Merge Phase C của Thịnh trước, sau đó merge Task 12 để tránh conflict |
+| B5 | Task 13 Blueprint | `doc/reports/blueprint.md` | Có kiến trúc, failure actions, CI gates và monitoring (ghi rõ là đề xuất); có latency input layers đã đo; phần chưa đo ghi “chưa đo” |
+| B6 | Đóng gói và nộp | `python scripts/check_lab.py --with-tests` | Checker pass; điền commit SHA ở đầu file; nộp link |
 
 ### 2. Trần Võ Hoàng Nguyên — Phase A (30 điểm + bonus 4)
 
 | Task | Hàm | Tiêu chí xong |
 |---|---|---|
-| 1 | `group_by_distribution` | 3 keys factual/multi_hop/adversarial, đúng 20/20/10 |
-| 2 | `run_ragas_50q` | Gọi `m4_eval.evaluate_ragas`; trả `RagasEvaluation` gồm 50 `RagasResult` và `evaluator_models`; 4 metric là `float` hữu hạn trong [0,1], không để NaN |
-| 3 | `bottom_10` | 10 câu xếp tăng dần theo avg_score; mỗi câu có rank/id/question/distribution/worst_metric/diagnosis/suggested_fix |
-| 4 | `cluster_analysis` | Matrix worst_metric × distribution; nhóm yếu nhất chọn theo **mean thấp nhất**, không theo tổng số câu; bỏ nhóm rỗng khỏi phép chia; có insight |
+| Task 1 | `group_by_distribution` | 3 keys factual/multi_hop/adversarial, đúng 20/20/10 |
+| Task 2 | `run_ragas_50q` | Gọi `m4_eval.evaluate_ragas`; trả `RagasEvaluation` gồm 50 `RagasResult` và `evaluator_models`; 4 metric là `float` hữu hạn trong [0,1], không để NaN |
+| Task 3 | `bottom_10` | 10 câu xếp tăng dần theo avg_score; mỗi câu có rank/id/question/distribution/worst_metric/diagnosis/suggested_fix |
+| Task 4 | `cluster_analysis` | Matrix worst_metric × distribution; nhóm yếu nhất chọn theo **mean thấp nhất**, không theo tổng số câu; bỏ nhóm rỗng khỏi phép chia; có insight |
 | Report | `doc/reports/failure_clusters.md` | Đọc question/answer/contexts/reference của các câu yếu trước khi kết luận nguyên nhân; nếu adversarial mean < factual mean thì phân tích bẫy phiên bản để lấy bonus |
 
 Chạy: `python -m pytest tests/test_phase_a.py -q` rồi `python scripts/run_experiments.py --phase a --live`.
@@ -64,10 +64,10 @@ Chạy: `python -m pytest tests/test_phase_a.py -q` rồi `python scripts/run_ex
 
 | Task | Hàm | Tiêu chí xong |
 |---|---|---|
-| 5 | `pairwise_judge(q, A, B, reference)` | LLM trả JSON winner A/B/tie, reasoning, score_a/score_b trong [0,1]; prompt có reference |
-| 6 | `swap_and_average` | Chấm 2 lượt A/B và B/A; quy winner và scores về A/B ban đầu; hai lượt đồng thuận thì lấy winner đó, không thì tie |
-| 7 | `cohen_kappa` | Đúng công thức; hai bên đồng ý hoàn toàn trên tập nhãn có cả 0 và 1 thì κ=1; kết quả trong [-1,1] |
-| 8 | `bias_report` | Đếm position inconsistency; tính tỷ lệ answer dài hơn thắng trong các case decisive; có diễn giải |
+| Task 5 | `pairwise_judge(q, A, B, reference)` | LLM trả JSON winner A/B/tie, reasoning, score_a/score_b trong [0,1]; prompt có reference |
+| Task 6 | `swap_and_average` | Chấm 2 lượt A/B và B/A; quy winner và scores về A/B ban đầu; hai lượt đồng thuận thì lấy winner đó, không thì tie |
+| Task 7 | `cohen_kappa` | Đúng công thức; hai bên đồng ý hoàn toàn trên tập nhãn có cả 0 và 1 thì κ=1; kết quả trong [-1,1] |
+| Task 8 | `bias_report` | Đếm position inconsistency; tính tỷ lệ answer dài hơn thắng trong các case decisive; có diễn giải |
 | Report | `doc/reports/bias_report.md` | Đọc nội dung từng cặp trước khi kết luận là bias; κ > 0.6 thì đạt bonus |
 
 Lưu ý: cặp A/B phải đúng id 1, 5, 12, 21, 41. **Không** đưa `human_label`/`human_note`
@@ -80,8 +80,8 @@ Chạy: `python -m pytest tests/test_phase_b.py -q` rồi `python scripts/run_ex
 |---|---|---|
 | 9a | `pii_scan` | Presidio detect và anonymize CCCD/CMND, số điện thoại VN, email; trả entities kèm vị trí |
 | 9b | `check_input_rail` (async) | Chỉ chạy input rail; quyết định dựa trên `result.log.activated_rails`, **không** dò chữ “xin lỗi/không thể” |
-| 10 | `run_adversarial_suite` | Giữ nguyên input; `expected` chỉ dùng để đối chiếu; trả đủ các rows. Yêu cầu ≥15/20 attacks bị chặn (≥18 để lấy bonus) và 8/8 câu sạch được cho qua |
-| 11 | `check_output_rail` (async) | 4 output cases: output sạch giữ nguyên, output nhạy cảm bị thay hoặc redact |
+| Task 10 | `run_adversarial_suite` | Giữ nguyên input; `expected` chỉ dùng để đối chiếu; trả đủ các rows. Yêu cầu ≥15/20 attacks bị chặn (≥18 để lấy bonus) và 8/8 câu sạch được cho qua |
+| Task 11 | `check_output_rail` (async) | 4 output cases: output sạch giữ nguyên, output nhạy cảm bị thay hoặc redact |
 | Config | `guardrails/config.yml`, `rails.co` | Tinh chỉnh self-check prompts để giảm số câu sạch bị chặn nhầm |
 
 Cài NeMo, Presidio và spaCy **ngay đầu buổi**; nếu lỗi thì ghi lỗi thật vào TEAM.
