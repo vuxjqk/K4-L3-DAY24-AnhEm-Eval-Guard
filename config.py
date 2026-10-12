@@ -68,6 +68,4 @@ GEMINI_OPENAI_BASE_URL = os.getenv(
     "GEMINI_OPENAI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/"
 )
 GEMINI_RPM = int(os.getenv("GEMINI_RPM", "12"))
-GEMINI_OPENAI_BASE_URL = os.getenv("GEMINI_OPENAI_BASE_URL",
-                                   "https://generativelanguage.googleapis.com/v1beta/openai/")
 LLM_CACHE_DIR = os.path.join(os.path.dirname(__file__), ".cache")

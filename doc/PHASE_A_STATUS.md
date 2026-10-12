@@ -1,80 +1,77 @@
 # Bàn giao Phase A — Trần Võ Hoàng Nguyên (2A202602551)
 
-## Trạng thái
+## Trạng thái hiện tại
 
-Người dùng đã dừng Claude Code và giao Codex làm toàn bộ Tasks 1–4.
-Mã và kiểm tra offline đã hoàn thành. Chưa hoàn thành bằng chứng live và báo cáo
-phân tích kết quả để nộp: chưa có artifacts/answers_50q.json; OPENAI_API_KEY và
-GEMINI_API_KEY hiện chưa được cấu hình. Không có số đo RAGAS thật trong repo.
-Không tạo mock artifact hay thay answer bằng ground_truth.
+**Tasks 1–4, thực nghiệm thật và báo cáo phân tích đã hoàn thành.**
+Đã kéo main tới commit 4404f72, dùng 50 answers từ commit 34b1bad của nhóm.
+Không sinh lại hoặc sửa answers. RAGAS chạy thật bằng Gemini 3.8 và BGE-M3,
+đã lưu artifacts/ragas_50q.json và hoàn thiện doc/reports/failure_clusters.md.
+Run timestamp UTC: 2026-10-12T09:52:54.986101+00:00 (ngày 12/10/2026, UTC+7).
 
-## Phần đã làm
+## Kết quả
 
-| Task | Implementation | Kiểm tra chính |
+| Nhóm | Số câu | Avg score |
 |---|---|---|
-| 1 | group_by_distribution trong src/phase_a_ragas.py | Đúng nhóm, giữ thứ tự/nội dung, từ chối distribution không hợp lệ |
-| 2 | run_ragas_50q trong src/phase_a_ragas.py | Đủ 50 rows, 20/20/10, model metadata từ m4; từ chối NaN, thiếu rows, sai nguồn/thứ tự và metric ngoài [0,1] |
-| 3 | bottom_10 trong src/phase_a_analysis.py, public wrapper trong phase_a_ragas | Stable sort, tối đa 10, đầy đủ rank/id/diagnosis/fix; không mutate input |
-| 4 | cluster_analysis trong src/phase_a_analysis.py, public wrapper trong phase_a_ragas | Matrix mọi câu, weakest theo mean thấp nhất, bỏ nhóm rỗng, tie-break ổn định, insight có giới hạn |
+| factual | 20 | 0.918184 |
+| multi_hop | 20 | 0.709813 |
+| adversarial | 10 | 0.743413 |
 
-Sửa tương thích tối thiểu: config có GEMINI_OPENAI_BASE_URL mà m4 đang import;
-m4 trả metadata.evaluator_models từ LLM và embedding được cấu hình thực tế.
-Nếu evaluator lỗi thì báo lỗi; không trả điểm 0 hay rows rỗng như kết quả hợp lệ.
-Chưa kiểm chứng endpoint, model availability hoặc evaluator trên API thật.
+Nhóm yếu nhất: multi_hop. Metric thấp nhất xuất hiện nhiều nhất: context_recall,
+17/50 câu. Matrix đếm mọi câu, không phải số failures theo ngưỡng tuyệt đối.
+Bottom 10 ids: 33, 39, 44, 25, 48, 9, 32, 50, 37, 22.
+Adversarial mean thấp hơn factual mean; report có phân tích bẫy version,
+negation và contradiction để xét bonus A +4. Người chấm xác nhận điểm cuối.
 
-Thêm scripts/write_phase_a_report.py để tạo bảng, bottom 10, matrix và trích
-answer/contexts/reference từ report đã validate, không gọi API. Script từ chối
-nguồn stale trước khi ghi file. Report sinh ra vẫn cần học viên đọc bằng chứng
-và bổ sung nhận xét nguyên nhân cụ thể trước khi nộp; metric đơn lẻ chưa chứng
-minh nguyên nhân. Lệnh này sẽ ghi lại doc/reports/failure_clusters.md, nên chạy
-trước khi chỉnh tay nội dung phân tích để không mất phần nhận xét đã bổ sung.
+## Kiểm chứng
 
-## Kiểm tra thực tế
+- Đủ 50 answers, đúng 20/20/10 và nguồn question/reference; tất cả mode llm,
+  generation model gpt-4o-mini-2024-07-18; không có contexts rỗng.
+- Bốn metric mỗi câu hữu hạn trong [0,1], metadata phiên bản 2/run_kind live,
+  evaluator models BAAI/bge-m3 và ag/gemini-3.8-flash; hashes đúng đầu vào.
+- Report có bảng metrics, matrix, bottom 10 giữ nguyên Task 3 và phân tích
+  answer/contexts/reference của các case đại diện; bổ sung case 41 ngoài bottom
+  để chỉ rõ faithfulness không bảo đảm dùng đúng policy hiện hành.
+- **96 tests Phase A/schema/support pass** trong virtualenv mới, không bỏ test.
+  Lỗi test socketpair Windows trước đây đã được xử lý bằng chạy offline tests
+  với quyền loopback; vẫn mock và chặn API ngoài trong tests.
 
-Python trên máy: 3.11.9.
+## Môi trường và lệnh tái lập
 
-```powershell
-python -m pytest tests/test_phase_a.py tests/test_phase_a_adapter.py tests/test_phase_a_analysis.py tests/test_phase_a_report.py tests/test_report_contracts.py tests/test_support.py -k "not phase_c_runner_executes" -q
-```
-
-Kết quả: **92 passed, 1 deselected**. Bao gồm toàn bộ Phase A tests, các edge
-cases mới, kiểm tra report export và regressions schema/support.
-Các dữ liệu synthetic chỉ dùng bên trong tests và thư mục pytest tạm, không
-ghi mock results vào artifacts của bài nộp.
-
-Một support test Phase C bị loại khỏi lần chạy này: test_phase_c_runner_executes_one_input_batch_and_four_outputs.
-Lần chạy riêng bị treo ở Windows socketpair/accept khi asyncio tạo event loop
-trong môi trường thực thi hiện tại; đã dừng tiến trình. Không sửa test để né lỗi.
-Đây là kiểm tra ngoài Phase A; không tuyên bố toàn bộ tests lab đã pass.
-
-## Bước cần thiết để có bài nộp Phase A hoàn chỉnh
-
-1. Nhận answers_50q.json thật từ Trần Anh Vũ, đúng 50 ids và 20/20/10;
-   hoặc trưởng nhóm chạy python scripts/setup_answers.py --live sau khi pipeline sẵn sàng.
-2. Cấu hình key trong .env trên máy, không gửi key trong chat hoặc commit.
-   CLI starter yêu cầu OPENAI_API_KEY; m4 hiện dùng GEMINI_API_KEY/GOOGLE_API_KEY
-   và GEMINI_MODEL để evaluation. Xác nhận model/endpoint hoạt động trước batch.
-3. Chạy từ gốc repo:
+Windows, Python 3.11.9; .venv-phase-a được tách khỏi packages toàn máy.
+Requirements riêng ở requirements/requirements-phase-a.txt và constraints-core.txt,
+bao gồm RAGAS 0.1.22, LangChain 0.2.x, PyTorch CPU 2.6.0, datasets 2.21.0,
+pyarrow 17.0.0, sentence-transformers 3.4.1. Đã qua import runtime.
+Không commit .env, virtualenv hoặc cache model.
 
 ```powershell
-python scripts/run_experiments.py --phase a --live
-python scripts/write_phase_a_report.py
+py -3.11 -m venv .venv-phase-a
+.\.venv-phase-a\Scripts\python.exe -m pip install -r requirements/requirements-phase-a.txt -c requirements/constraints-core.txt
+.\.venv-phase-a\Scripts\python.exe scripts/run_experiments.py --phase a --live
 ```
 
-4. Đọc bằng chứng bottom 10 trong failure_clusters.md, bổ sung phân tích các
-   câu đại diện: retrieval/generation/version/negation; đề xuất sửa và cách kiểm chứng.
-5. Đối chiếu adversarial mean với factual mean, phân tích bẫy để xét bonus +4
-   nếu điều kiện thật đạt. Không sửa dữ liệu hoặc làm điểm thấp đi để lấy bonus.
-6. Cập nhật INDIVIDUAL và bằng chứng commit/PR thật, kiểm tra secrets; bàn giao
-   source, ragas_50q.json và report cho trưởng nhóm. B/C và blueprint vẫn do
-   người được phân công trong TEAM phụ trách.
-7. Trưởng nhóm chạy python scripts/check_lab.py --with-tests trên bản tích hợp.
-   Checker toàn lab sẽ còn fail nếu B/C, reports hoặc TEAM chưa hoàn thiện.
+Phase A CLI chỉ yêu cầu key của evaluator Gemini (GEMINI_API_KEY hoặc GOOGLE_API_KEY),
+GEMINI_MODEL và GEMINI_OPENAI_BASE_URL trong .env; không yêu cầu thêm OpenAI key.
+B/C giữ yêu cầu OpenAI theo runner hiện tại.
+Các lệnh live có API calls/chi phí. Khi artifact đã có, validate offline để tránh
+chấm lại không cần thiết. scripts/write_phase_a_report.py sẽ ghi lại report từ
+JSON và cần bổ sung phần phân tích thủ công; không chạy lại trên report đã hoàn thiện
+nếu chưa lưu phần nhận xét để phục hồi.
 
-## AI hỗ trợ và giới hạn
+## Phần bàn giao và giới hạn
 
-Codex viết mã, tests và công cụ tổng hợp báo cáo; Claude đã được giao nhưng
-bị người dùng dừng trước khi có file bàn giao. Không khai Claude đã implement.
-Nguyên cần đọc, giải thích và tự kiểm chứng mã trước khi nộp theo chính sách lớp.
-Các thay đổi hiện chỉ ở working tree, chưa commit/push; không phải bằng chứng
-đã chạy API và chưa đủ để tuyên bố đạt trọn 30 điểm.
+Mã Tasks 1–4, CLI/preflight fix, manifest runtime, tests, JSON RAGAS, report và
+phần INDIVIDUAL của Nguyên đã được cập nhật. Phase B/C và blueprint thuộc phần
+thành viên khác; checker toàn lab có thể còn fail vì các phần đó/TEAM chưa đủ.
+Nguyên cần đọc và giải thích mã, số đo và các nguyên nhân lỗi trước khi nộp.
+Codex hỗ trợ triển khai/chạy/phân tích; Claude được dừng trước khi có bàn giao.
+Không tuyên bố toàn lab hoặc production stack đã hoàn thành.
+
+## Kiểm tra sau khi tích hợp main mới nhất
+
+Đã merge main commit f1440d4, giữ cập nhật TEAM/guardrails của các thành viên.
+Chạy `.\.venv-phase-a\Scripts\python.exe -m pytest tests/ -q`: **116 passed,
+3 deselected** (ba integration tests không bật live; không gọi API lại).
+Checker PASS answers_50q.json, Phase A artifact, failure_clusters.md, mã Phase A
+và Phase C artifact. Còn bốn checks toàn bài chưa đạt: TEAM còn placeholder,
+bias_report.md còn mẫu, blueprint còn placeholder và thiếu judge_results.json.
+Các phần này cần thành viên phụ trách hoàn thiện; không phải lỗi Phase A.
