@@ -8,7 +8,7 @@ Trưởng nhóm/người nộp: Trần Anh Vũ — 2A202602570
 
 Ngày lab/deadline áp dụng: 12/10/2026, 23:59 — Asia/Ho_Chi_Minh (UTC+07:00)
 
-Commit dùng để chấm: `b643ff8` (commit nội dung cuối; commit kế tiếp chỉ điền SHA này)
+Commit dùng để chấm: `7fee91f` (commit cuối có đủ nội dung, check_lab 0 FAIL; commit sau chỉ cập nhật dòng này)
 
 Mỗi nhóm nộp một repo. Điền đủ thành viên và một mục INDIVIDUAL cho từng người.
 
