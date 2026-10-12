@@ -6,10 +6,10 @@ Người phụ trách: Trần Anh Vũ — 2A202602570
 
 Đây là **đề xuất CI/CD**, không phải workflow đã được triển khai/chạy.
 Nguồn kết quả: artifacts/ragas_50q.json, judge_results.json, guard_results.json.
-Run timestamp Phase C: 2026-10-12T09:15:56Z (`guard_results.json`); Phase A: 2026-10-12T09:52:54.986101+00:00 (`ragas_50q.json`); Phase B: {{created_at từ judge_results.json}};
+Run timestamp Phase C: 2026-10-12T09:15:56Z (`guard_results.json`); Phase A: 2026-10-12T09:52:54.986101+00:00 (`ragas_50q.json`); Phase B: 2026-10-12T11:49:46.317796+00:00 (`judge_results.json`);
 guard models: `gpt-4o-mini` (NeMo self-check input/output).
 Models generation/evaluator/judge từ A/B: generation `gpt-4o-mini-2024-07-18` (`answers_50q.json`);
-evaluator A: `ag/gemini-3.8-flash` và `BAAI/bge-m3` (`ragas_50q.json`); judge B: {{metadata.models.judge từ judge_results.json}}.
+evaluator A: `ag/gemini-3.8-flash` và `BAAI/bge-m3` (`ragas_50q.json`); judge B: `gemini-flash` (`judge_results.json`, đặt qua `JUDGE_MODEL` trong `.env`).
 
 ## Kiến trúc và failure action
 
@@ -108,7 +108,7 @@ Giới hạn: bộ 50/20/8/4 nhỏ, mỗi ngưỡng ở trên chỉ là điểm 
 clean đã là 12.5%, nên không dùng các bộ này để kết luận tỷ lệ production.
 
 RAGAS avg_score toàn bộ 50 câu: 0.799882; nhóm yếu nhất multi_hop, mean=0.709813. Faithfulness mean=0.774000. Matrix context_recall thấp nhất ở 17/50 câu; đây là thống kê tương đối, không phải 17 failures theo ngưỡng.
-Cohen’s κ: {{giá trị}}.
+Cohen’s κ: 0.80 trên 10 supplied model_answers (observed 9/10, chance 0.50; bất đồng duy nhất id 46: judge 0, human 1). Pairwise 5 cặp: position inconsistency 0/5, verbosity win rate 4/5 = 0.8.
 Attacks passed: 20/20 (Presidio chặn 4 câu PII id 1–4, NeMo input chặn 16); clean false_positive_rate: 0/8 = 0.0;
 output cases 4/4 đúng.
 
@@ -123,4 +123,9 @@ Cải tiến có thể kiểm tra:
    có 1 câu clean bị chặn nhầm (câu hỏi chính sách mật khẩu, rồi câu hỏi quy định lương thử việc) và 2 câu
    off-topic lọt. Đề xuất CI chạy suite Phase C 3 lần và lấy kết quả xấu nhất làm gate; kiểm tra bằng số
    lượt có clean bị chặn nhầm trên 3 lượt.
-5. {{Cải tiến từ bias_report.md, kèm cách kiểm tra.}}
+5. Verbosity win rate 0.8 chỉ dựa trên 5 cặp và `bias_report.md` cho thấy câu dài hơn thắng vì đủ ý hơn
+   (id 21 câu ngắn hơn vẫn thắng), nên chưa kết luận judge thiên vị độ dài. Đề xuất thêm bộ cặp kiểm soát
+   độ dài: cùng nội dung đúng, một bản được kéo dài bằng câu không thêm thông tin; judge không thiên vị thì
+   tỷ lệ tie/ngang điểm phải cao. Đồng thời mở rộng calibration từ 10 lên ≥30 nhãn người, theo dõi κ và
+   các case bất đồng kiểu id 46 (judge khắt khe về điều kiện thủ tục); chạy lại Phase B và so κ/verbosity
+   rate với baseline 0.80/0.8 hiện tại.
