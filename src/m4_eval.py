@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import (TEST_SET_PATH, GEMINI_API_KEY, GEMINI_MODEL, GEMINI_OPENAI_BASE_URL,
-                    EMBEDDING_QUERY_PREFIX)
+                    EMBEDDING_MODEL, EMBEDDING_QUERY_PREFIX)
 
 
 @dataclass
@@ -75,7 +75,9 @@ def evaluate_ragas(questions: list[str], answers: list[str],
         for m in metric_names:
             vals = [getattr(r, m) for r in per_question if getattr(r, m) == getattr(r, m)]
             aggregate[m] = sum(vals) / len(vals) if vals else 0.0
-        return {**aggregate, "per_question": per_question}
+        # Model IDs thực sự dùng trong lượt chấm: LLM judge của RAGAS + embedding local
+        metadata = {"evaluator_models": [GEMINI_MODEL, EMBEDDING_MODEL]}
+        return {**aggregate, "per_question": per_question, "metadata": metadata}
     except Exception as e:
         print(f"  ⚠️  RAGAS evaluation failed: {e}")
         return {**zeros, "per_question": []}
