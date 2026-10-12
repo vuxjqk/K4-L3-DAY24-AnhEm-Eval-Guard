@@ -6,10 +6,10 @@ Người phụ trách: Trần Anh Vũ — 2A202602570
 
 Đây là **đề xuất CI/CD**, không phải workflow đã được triển khai/chạy.
 Nguồn kết quả: artifacts/ragas_50q.json, judge_results.json, guard_results.json.
-Run timestamp Phase C: 2026-10-12T09:15:56Z (`guard_results.json`); Phase A/B: {{created_at của ragas_50q.json và judge_results.json}};
+Run timestamp Phase C: 2026-10-12T09:15:56Z (`guard_results.json`); Phase A: 2026-10-12T09:52:54.986101+00:00 (`ragas_50q.json`); Phase B: {{created_at từ judge_results.json}};
 guard models: `gpt-4o-mini` (NeMo self-check input/output).
 Models generation/evaluator/judge từ A/B: generation `gpt-4o-mini-2024-07-18` (`answers_50q.json`);
-evaluator/judge: {{metadata.models.evaluator và metadata.models.judge từ ragas_50q.json, judge_results.json}}.
+evaluator A: `ag/gemini-3.8-flash` và `BAAI/bge-m3` (`ragas_50q.json`); judge B: {{metadata.models.judge từ judge_results.json}}.
 
 ## Kiến trúc và failure action
 
@@ -107,7 +107,7 @@ không log API key. Drift: mỗi lần thêm tài liệu vào `data/` phải re-
 Giới hạn: bộ 50/20/8/4 nhỏ, mỗi ngưỡng ở trên chỉ là điểm khởi đầu. Một câu sai trong 8 câu
 clean đã là 12.5%, nên không dùng các bộ này để kết luận tỷ lệ production.
 
-RAGAS mean/worst distribution: {{giá trị}}.
+RAGAS avg_score toàn bộ 50 câu: 0.799882; nhóm yếu nhất multi_hop, mean=0.709813. Faithfulness mean=0.774000. Matrix context_recall thấp nhất ở 17/50 câu; đây là thống kê tương đối, không phải 17 failures theo ngưỡng.
 Cohen’s κ: {{giá trị}}.
 Attacks passed: 20/20 (Presidio chặn 4 câu PII id 1–4, NeMo input chặn 16); clean false_positive_rate: 0/8 = 0.0;
 output cases 4/4 đúng.
@@ -118,7 +118,7 @@ Cải tiến có thể kiểm tra:
    `setup_answers.py --live`; kiểm tra số câu “Không tìm thấy” giảm so với baseline 9/50.
 2. Viết `scripts/ci_gate.py` như mục CI gates và chạy thử với ba JSON hiện có; kiểm tra script
    trả exit 1 khi tạm nâng một ngưỡng lên trên giá trị thật.
-3. {{Cải tiến từ nhóm lỗi yếu nhất trong failure_clusters.md, kèm cách đo lại.}}
+3. Nhóm multi_hop yếu nhất: query decomposition lấy đủ nguồn theo từng ý, chunking giữ hàng bảng/công thức và filter theo quy trình/phiên bản. Kiểm thử 21/22/25/33/39 và 24/29; prompt xử lý phủ định/đủ ý cho 9/32/48/50. Sinh answers mới và chạy lại bốn metric trên cùng 50 câu, so mean theo nhóm và từng case; giữ baseline JSON hiện tại, không sửa điểm. Chi tiết bằng chứng trong `failure_clusters.md`; đây là cải tiến đề xuất, chưa chạy lại.
 4. Kết quả guard dao động giữa các lượt vì self-check dùng LLM: trước khi chỉnh prompt, các lượt cùng buổi
    có 1 câu clean bị chặn nhầm (câu hỏi chính sách mật khẩu, rồi câu hỏi quy định lương thử việc) và 2 câu
    off-topic lọt. Đề xuất CI chạy suite Phase C 3 lần và lấy kết quả xấu nhất làm gate; kiểm tra bằng số

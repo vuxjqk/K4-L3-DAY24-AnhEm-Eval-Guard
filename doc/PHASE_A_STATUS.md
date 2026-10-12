@@ -65,3 +65,13 @@ thành viên khác; checker toàn lab có thể còn fail vì các phần đó/T
 Nguyên cần đọc và giải thích mã, số đo và các nguyên nhân lỗi trước khi nộp.
 Codex hỗ trợ triển khai/chạy/phân tích; Claude được dừng trước khi có bàn giao.
 Không tuyên bố toàn lab hoặc production stack đã hoàn thành.
+
+## Kiểm tra sau khi tích hợp main mới nhất
+
+Đã merge main commit f1440d4, giữ cập nhật TEAM/guardrails của các thành viên.
+Chạy `.\.venv-phase-a\Scripts\python.exe -m pytest tests/ -q`: **116 passed,
+3 deselected** (ba integration tests không bật live; không gọi API lại).
+Checker PASS answers_50q.json, Phase A artifact, failure_clusters.md, mã Phase A
+và Phase C artifact. Còn bốn checks toàn bài chưa đạt: TEAM còn placeholder,
+bias_report.md còn mẫu, blueprint còn placeholder và thiếu judge_results.json.
+Các phần này cần thành viên phụ trách hoàn thiện; không phải lỗi Phase A.

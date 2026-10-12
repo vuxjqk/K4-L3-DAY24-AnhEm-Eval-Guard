@@ -74,3 +74,13 @@ Nguyên cần đọc, giải thích và kiểm chứng theo chính sách AI củ
 
 Đây là hoàn thiện Phase A, không tuyên bố Phase B/C, blueprint hoặc toàn bài
 nộp đã hoàn thành. Không commit API key, .env, virtualenv hay cache model.
+
+## Kiểm tra sau khi tích hợp main mới nhất
+
+Đã merge main commit f1440d4, giữ cập nhật TEAM/guardrails của các thành viên.
+Chạy `.\.venv-phase-a\Scripts\python.exe -m pytest tests/ -q`: **116 passed,
+3 deselected** (ba integration tests không bật live; không gọi API lại).
+Checker PASS answers_50q.json, Phase A artifact, failure_clusters.md, mã Phase A
+và Phase C artifact. Còn bốn checks toàn bài chưa đạt: TEAM còn placeholder,
+bias_report.md còn mẫu, blueprint còn placeholder và thiếu judge_results.json.
+Các phần này cần thành viên phụ trách hoàn thiện; không phải lỗi Phase A.
